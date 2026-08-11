@@ -103,6 +103,14 @@ export default async function SignupPage({
           Log in
         </Link>
       </p>
+
+      <p className="mt-8 text-center text-xs text-gray-500">
+        While signing up, you are consenting to the{" "}
+        <Link href="/terms" className="underline underline-offset-4 hover:text-gray-700">
+          Terms and Conditions
+        </Link>
+        .
+      </p>
     </main>
   );
 }
