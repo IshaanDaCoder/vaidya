@@ -21,30 +21,30 @@ export default async function ChooseRolePage({
       )}
 
       <form className="mt-8 space-y-5">
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            formAction={chooseRole}
-            name="role"
-            value="patient"
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground hover:border-trust hover:bg-trust/10 hover:text-trust-dark dark:hover:text-trust"
-          >
+        <fieldset className="grid grid-cols-2 gap-3">
+          <legend className="sr-only">I am a...</legend>
+          <label className="flex cursor-pointer items-center justify-center rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
+            <input type="radio" name="role" value="patient" defaultChecked className="sr-only" />
             Patient
-          </button>
-          <button
-            formAction={chooseRole}
-            name="role"
-            value="doctor"
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground hover:border-trust hover:bg-trust/10 hover:text-trust-dark dark:hover:text-trust"
-          >
+          </label>
+          <label className="flex cursor-pointer items-center justify-center rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
+            <input type="radio" name="role" value="doctor" className="sr-only" />
             Doctor
-          </button>
-        </div>
+          </label>
+        </fieldset>
 
         <label className="flex items-start gap-2 text-xs text-muted">
           <input type="checkbox" name="consent" required className="mt-0.5" />
           I agree to Vaidya processing my personal data to provide this service,
           in line with the privacy policy.
         </label>
+
+        <button
+          formAction={chooseRole}
+          className="w-full rounded-md bg-trust px-4 py-2.5 text-sm font-medium text-white hover:bg-trust-dark"
+        >
+          Continue
+        </button>
       </form>
     </main>
   );

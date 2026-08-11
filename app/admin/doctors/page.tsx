@@ -104,25 +104,28 @@ export default async function AdminDoctorsPage({
                 <p className="mt-1 text-sm text-red-600 dark:text-red-400">No document uploaded</p>
               )}
 
-              <form className="mt-4 flex gap-3">
-                <input type="hidden" name="doctorId" value={d.user_id} />
-                <button
-                  formAction={reviewDoctorSubmission}
-                  name="decision"
-                  value="verified"
-                  className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-                >
-                  Approve
-                </button>
-                <button
-                  formAction={reviewDoctorSubmission}
-                  name="decision"
-                  value="rejected"
-                  className="rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-900/50 dark:text-red-300 dark:hover:bg-red-950/40"
-                >
-                  Reject
-                </button>
-              </form>
+              <div className="mt-4 flex gap-3">
+                <form>
+                  <input type="hidden" name="doctorId" value={d.user_id} />
+                  <input type="hidden" name="decision" value="verified" />
+                  <button
+                    formAction={reviewDoctorSubmission}
+                    className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
+                  >
+                    Approve
+                  </button>
+                </form>
+                <form>
+                  <input type="hidden" name="doctorId" value={d.user_id} />
+                  <input type="hidden" name="decision" value="rejected" />
+                  <button
+                    formAction={reviewDoctorSubmission}
+                    className="rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-900/50 dark:text-red-300 dark:hover:bg-red-950/40"
+                  >
+                    Reject
+                  </button>
+                </form>
+              </div>
             </div>
           ))}
         </div>
