@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signInWithGoogle, signup } from "../actions";
+import { signInWithGoogle, signInWithMicrosoft, signup } from "../actions";
 
 export default async function SignupPage({
   searchParams,
@@ -87,14 +87,14 @@ export default async function SignupPage({
             Google
           </button>
         </form>
-        <button
-          type="button"
-          disabled
-          title="Coming soon — Microsoft sign-in isn't configured yet"
-          className="w-full cursor-not-allowed rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-400"
-        >
-          Microsoft
-        </button>
+        <form>
+          <button
+            formAction={signInWithMicrosoft}
+            className="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm font-medium hover:bg-gray-50"
+          >
+            Microsoft
+          </button>
+        </form>
       </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">

@@ -58,21 +58,32 @@ export async function login(formData: FormData) {
   redirect(await getPostAuthRedirect(supabase));
 }
 
-export async function signInWithGoogle() {
+async function signInWithOAuthProvider(
+  provider: "google" | "azure",
+  label: string,
+) {
   const supabase = await createClient();
   const origin =
     (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL!;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
+    provider,
     options: { redirectTo: `${origin}/auth/callback` },
   });
 
   if (error || !data.url) {
-    redirect(`/login?error=${encodeURIComponent(error?.message ?? "Google sign-in failed.")}`);
+    redirect(`/login?error=${encodeURIComponent(error?.message ?? `${label} sign-in failed.`)}`);
   }
 
   redirect(data.url);
+}
+
+export async function signInWithGoogle() {
+  await signInWithOAuthProvider("google", "Google");
+}
+
+export async function signInWithMicrosoft() {
+  await signInWithOAuthProvider("azure", "Microsoft");
 }
 
 export async function logout() {
