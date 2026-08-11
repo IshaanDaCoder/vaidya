@@ -15,6 +15,12 @@ export async function chooseRole(formData: FormData) {
     redirect(`/onboarding/role?error=${encodeURIComponent("Choose an account type.")}`);
   }
 
+  if (formData.get("consent") !== "on") {
+    redirect(
+      `/onboarding/role?error=${encodeURIComponent("You must agree to data processing to continue.")}`,
+    );
+  }
+
   const supabase = await createClient();
   const {
     data: { user },

@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { getPostAuthRedirect } from "@/utils/get-post-auth-redirect";
@@ -55,6 +56,23 @@ export async function login(formData: FormData) {
   }
 
   redirect(await getPostAuthRedirect(supabase));
+}
+
+export async function signInWithGoogle() {
+  const supabase = await createClient();
+  const origin =
+    (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL!;
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${origin}/auth/callback` },
+  });
+
+  if (error || !data.url) {
+    redirect(`/login?error=${encodeURIComponent(error?.message ?? "Google sign-in failed.")}`);
+  }
+
+  redirect(data.url);
 }
 
 export async function logout() {

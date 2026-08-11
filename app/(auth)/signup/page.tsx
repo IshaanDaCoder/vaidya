@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signup } from "../actions";
+import { signInWithGoogle, signup } from "../actions";
 
 export default async function SignupPage({
   searchParams,
@@ -79,14 +79,14 @@ export default async function SignupPage({
 
       <div className="mt-6 flex flex-col gap-2">
         <div className="text-center text-xs text-gray-400">Or continue with</div>
-        <button
-          type="button"
-          disabled
-          title="Coming soon — Google sign-in isn't configured yet"
-          className="w-full cursor-not-allowed rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-400"
-        >
-          Google
-        </button>
+        <form>
+          <button
+            formAction={signInWithGoogle}
+            className="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm font-medium hover:bg-gray-50"
+          >
+            Google
+          </button>
+        </form>
         <button
           type="button"
           disabled

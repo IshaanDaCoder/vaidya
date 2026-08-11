@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { login } from "../actions";
+import { login, signInWithGoogle } from "../actions";
 
 export default async function LoginPage({
   searchParams,
@@ -59,6 +59,18 @@ export default async function LoginPage({
           Log in
         </button>
       </form>
+
+      <div className="mt-6 flex flex-col gap-2">
+        <div className="text-center text-xs text-gray-400">Or continue with</div>
+        <form>
+          <button
+            formAction={signInWithGoogle}
+            className="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm font-medium hover:bg-gray-50"
+          >
+            Google
+          </button>
+        </form>
+      </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}

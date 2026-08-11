@@ -20,23 +20,31 @@ export default async function ChooseRolePage({
         </p>
       )}
 
-      <form className="mt-8 grid grid-cols-2 gap-3">
-        <button
-          formAction={chooseRole}
-          name="role"
-          value="patient"
-          className="rounded-md border border-gray-300 px-4 py-3 text-sm font-medium hover:border-teal-600 hover:bg-teal-50 hover:text-teal-800"
-        >
-          Patient
-        </button>
-        <button
-          formAction={chooseRole}
-          name="role"
-          value="doctor"
-          className="rounded-md border border-gray-300 px-4 py-3 text-sm font-medium hover:border-teal-600 hover:bg-teal-50 hover:text-teal-800"
-        >
-          Doctor
-        </button>
+      <form className="mt-8 space-y-5">
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            formAction={chooseRole}
+            name="role"
+            value="patient"
+            className="rounded-md border border-gray-300 px-4 py-3 text-sm font-medium hover:border-teal-600 hover:bg-teal-50 hover:text-teal-800"
+          >
+            Patient
+          </button>
+          <button
+            formAction={chooseRole}
+            name="role"
+            value="doctor"
+            className="rounded-md border border-gray-300 px-4 py-3 text-sm font-medium hover:border-teal-600 hover:bg-teal-50 hover:text-teal-800"
+          >
+            Doctor
+          </button>
+        </div>
+
+        <label className="flex items-start gap-2 text-xs text-gray-600">
+          <input type="checkbox" name="consent" required className="mt-0.5" />
+          I agree to Vaidya processing my personal data to provide this service,
+          in line with the privacy policy.
+        </label>
       </form>
     </main>
   );
