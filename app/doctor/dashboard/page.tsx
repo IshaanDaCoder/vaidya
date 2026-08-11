@@ -78,8 +78,14 @@ export default async function DoctorDashboardPage() {
         </div>
       )}
 
+      <Link
+        href="/doctor/availability"
+        className="mt-6 inline-block rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:bg-surface"
+      >
+        Manage availability
+      </Link>
       <p className="mt-6 text-sm text-muted">
-        Availability and today&apos;s consultations land here on Days 6–10.
+        Today&apos;s consultations land here on Days 9–10.
       </p>
       <form className="mt-8">
         <button
