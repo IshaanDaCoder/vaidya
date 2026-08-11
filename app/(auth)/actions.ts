@@ -63,8 +63,16 @@ async function signInWithOAuthProvider(
   label: string,
 ) {
   const supabase = await createClient();
+  // Prefer the explicit site URL — the "origin" header isn't guaranteed to
+  // be present on every request path, and a silent fallback to `undefined`
+  // here produces a redirect to the literal host "undefined", which shows
+  // up to the user as a browser-level "website not found" error.
   const origin =
-    (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL!;
+    process.env.NEXT_PUBLIC_SITE_URL ?? (await headers()).get("origin");
+
+  if (!origin) {
+    redirect(`/login?error=${encodeURIComponent(`${label} sign-in is misconfigured (no site URL).`)}`);
+  }
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
