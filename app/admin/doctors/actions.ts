@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { isAdminEmail } from "@/utils/is-admin";
+import { sendDoctorApprovedEmail } from "@/utils/email";
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -38,6 +39,13 @@ export async function reviewDoctorSubmission(formData: FormData) {
 
   if (error) {
     redirect(`/admin/doctors?error=${encodeURIComponent(error.message)}`);
+  }
+
+  if (decision === "verified") {
+    const { data: doctorUser } = await admin.auth.admin.getUserById(doctorId);
+    if (doctorUser.user?.email) {
+      await sendDoctorApprovedEmail(doctorUser.user.email);
+    }
   }
 
   revalidatePath("/admin/doctors");
