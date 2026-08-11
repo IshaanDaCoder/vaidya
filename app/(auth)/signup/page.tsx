@@ -4,9 +4,10 @@ import { signInWithGoogle, signInWithMicrosoft, signup } from "../actions";
 export default async function SignupPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; role?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, role } = await searchParams;
+  const defaultRole = role === "doctor" ? "doctor" : "patient";
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6 py-16">
@@ -28,11 +29,23 @@ export default async function SignupPage({
         <fieldset className="grid grid-cols-2 gap-3">
           <legend className="sr-only">I am a...</legend>
           <label className="flex cursor-pointer items-center justify-center rounded-md border border-gray-300 px-4 py-3 text-sm font-medium has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50 has-[:checked]:text-teal-800">
-            <input type="radio" name="role" value="patient" defaultChecked className="sr-only" />
+            <input
+              type="radio"
+              name="role"
+              value="patient"
+              defaultChecked={defaultRole === "patient"}
+              className="sr-only"
+            />
             Patient
           </label>
           <label className="flex cursor-pointer items-center justify-center rounded-md border border-gray-300 px-4 py-3 text-sm font-medium has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50 has-[:checked]:text-teal-800">
-            <input type="radio" name="role" value="doctor" className="sr-only" />
+            <input
+              type="radio"
+              name="role"
+              value="doctor"
+              defaultChecked={defaultRole === "doctor"}
+              className="sr-only"
+            />
             Doctor
           </label>
         </fieldset>
