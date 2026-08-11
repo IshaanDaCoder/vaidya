@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 import { chooseRole } from "./actions";
 
 export default async function ChooseRolePage({
@@ -6,6 +8,25 @@ export default async function ChooseRolePage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/login");
+
+  // Already has a role — this page is only for the gap between an OAuth
+  // sign-in and choosing one, so don't show it again once that's settled.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profile) {
+    redirect(profile.role === "doctor" ? "/doctor/dashboard" : "/search");
+  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6 py-16">
