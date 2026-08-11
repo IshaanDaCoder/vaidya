@@ -41,6 +41,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
+      // The no-flash theme script below intentionally mutates this
+      // element's class list before React hydrates, so a mismatch here
+      // is expected and safe to suppress — this is the standard pattern
+      // for theme-toggle scripts (e.g. next-themes uses the same fix).
+      suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: noFlashThemeScript }} />
