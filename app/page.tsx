@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const steps = [
   {
@@ -59,7 +60,7 @@ export default function Home() {
     <>
       <header className="sticky top-0 z-20 border-b border-line bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="font-serif text-xl font-semibold text-trust-dark">
+          <Link href="/" className="font-serif text-xl font-semibold text-trust-dark dark:text-trust">
             Vaidya
           </Link>
           <nav className="flex items-center gap-6 text-sm text-muted">
@@ -75,6 +76,7 @@ export default function Home() {
             >
               Sign up
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </header>
@@ -83,7 +85,7 @@ export default function Home() {
         {/* Hero */}
         <section className="bg-noise relative overflow-hidden border-b border-line">
           <div className="mx-auto max-w-3xl px-6 py-28 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-trust-dark">
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-trust-dark dark:text-trust">
               Now connecting patients &amp; doctors across India
             </span>
             <h1 className="mt-8 font-serif text-4xl leading-[1.12] font-semibold tracking-tight text-balance text-foreground sm:text-5xl">
@@ -105,7 +107,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/signup?role=doctor"
-                className="w-full rounded-full border border-line bg-surface px-7 py-3.5 text-center text-sm font-medium text-foreground transition-colors hover:border-trust hover:text-trust-dark sm:w-auto"
+                className="w-full rounded-full border border-line bg-surface px-7 py-3.5 text-center text-sm font-medium text-foreground transition-colors hover:border-trust hover:text-trust-dark dark:hover:text-trust sm:w-auto"
               >
                 I&apos;m a doctor
               </Link>

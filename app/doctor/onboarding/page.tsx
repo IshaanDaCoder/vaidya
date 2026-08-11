@@ -19,30 +19,30 @@ export default async function DoctorOnboardingPage({
 
   return (
     <main className="mx-auto max-w-lg px-6 py-16">
-      <h1 className="text-2xl font-semibold">
+      <h1 className="text-2xl font-semibold text-foreground">
         {existing ? "Update your profile" : "Complete your doctor profile"}
       </h1>
-      <p className="mt-2 text-sm text-gray-600">
+      <p className="mt-2 text-sm text-muted">
         This information is reviewed before your profile becomes visible to
         patients. You can&apos;t approve your own verification — an admin
         reviews every submission.
       </p>
 
       {existing && (
-        <p className="mt-4 inline-block rounded-full border px-3 py-1 text-xs font-medium capitalize">
+        <p className="mt-4 inline-block rounded-full border border-line px-3 py-1 text-xs font-medium capitalize text-foreground">
           Status: {existing.verification_status}
         </p>
       )}
 
       {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
           {error}
         </p>
       )}
 
       <form className="mt-8 space-y-5">
         <div>
-          <label htmlFor="specialization" className="text-xs text-gray-600">
+          <label htmlFor="specialization" className="text-xs text-muted">
             Specialization
           </label>
           <input
@@ -50,12 +50,12 @@ export default async function DoctorOnboardingPage({
             name="specialization"
             required
             defaultValue={existing?.specialization ?? ""}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
           />
         </div>
 
         <div>
-          <label htmlFor="qualifications" className="text-xs text-gray-600">
+          <label htmlFor="qualifications" className="text-xs text-muted">
             Qualifications
           </label>
           <input
@@ -64,12 +64,12 @@ export default async function DoctorOnboardingPage({
             required
             placeholder="MBBS, MD (General Medicine)"
             defaultValue={existing?.qualifications ?? ""}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
           />
         </div>
 
         <div>
-          <label htmlFor="licenseNumber" className="text-xs text-gray-600">
+          <label htmlFor="licenseNumber" className="text-xs text-muted">
             Medical registration / license number
           </label>
           <input
@@ -77,15 +77,15 @@ export default async function DoctorOnboardingPage({
             name="licenseNumber"
             required
             defaultValue={existing?.license_number ?? ""}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
           />
         </div>
 
         <div>
-          <label htmlFor="licenseDocument" className="text-xs text-gray-600">
+          <label htmlFor="licenseDocument" className="text-xs text-muted">
             Upload license / registration certificate
             {existing?.license_document_path && (
-              <span className="ml-1 text-teal-700">(already on file — optional to replace)</span>
+              <span className="ml-1 text-trust-dark dark:text-trust">(already on file — optional to replace)</span>
             )}
           </label>
           <input
@@ -94,12 +94,12 @@ export default async function DoctorOnboardingPage({
             type="file"
             accept=".pdf,.png,.jpg,.jpeg"
             required={!existing?.license_document_path}
-            className="mt-1 w-full text-sm"
+            className="mt-1 w-full text-sm text-foreground"
           />
         </div>
 
         <div>
-          <label htmlFor="city" className="text-xs text-gray-600">
+          <label htmlFor="city" className="text-xs text-muted">
             City
           </label>
           <input
@@ -107,12 +107,12 @@ export default async function DoctorOnboardingPage({
             name="city"
             required
             defaultValue={existing?.city ?? ""}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
           />
         </div>
 
         <div>
-          <label htmlFor="consultationFeeRupees" className="text-xs text-gray-600">
+          <label htmlFor="consultationFeeRupees" className="text-xs text-muted">
             Consultation fee (₹, from your second consultation with a patient onward)
           </label>
           <input
@@ -125,12 +125,12 @@ export default async function DoctorOnboardingPage({
             defaultValue={
               existing ? Math.round(existing.consultation_fee_cents / 100) : ""
             }
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
           />
         </div>
 
         <div>
-          <label htmlFor="bio" className="text-xs text-gray-600">
+          <label htmlFor="bio" className="text-xs text-muted">
             Bio (shown on your public profile)
           </label>
           <textarea
@@ -138,13 +138,13 @@ export default async function DoctorOnboardingPage({
             name="bio"
             rows={4}
             defaultValue={existing?.bio ?? ""}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
+            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
           />
         </div>
 
         <button
           formAction={submitDoctorProfile}
-          className="w-full rounded-md bg-teal-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-800"
+          className="w-full rounded-md bg-trust px-4 py-2.5 text-sm font-medium text-white hover:bg-trust-dark"
         >
           {existing ? "Save changes" : "Submit for verification"}
         </button>

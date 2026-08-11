@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { isAdminEmail } from "@/utils/is-admin";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { reviewDoctorSubmission } from "./actions";
 
 async function withSignedDocUrl(
@@ -54,37 +55,40 @@ export default async function AdminDoctorsPage({
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl font-semibold">Doctor verification queue</h1>
-      <p className="mt-2 text-sm text-gray-600">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-foreground">Doctor verification queue</h1>
+        <ThemeToggle />
+      </div>
+      <p className="mt-2 text-sm text-muted">
         Signed in as admin: {user.email}
       </p>
 
       {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
           {error}
         </p>
       )}
 
       <section className="mt-8">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
           Pending ({pendingWithUrls.length})
         </h2>
 
         {pendingWithUrls.length === 0 && (
-          <p className="mt-3 text-sm text-gray-500">Nothing waiting for review.</p>
+          <p className="mt-3 text-sm text-muted">Nothing waiting for review.</p>
         )}
 
         <div className="mt-4 space-y-4">
           {pendingWithUrls.map((d) => (
-            <div key={d.user_id} className="rounded-md border border-gray-300 p-4">
+            <div key={d.user_id} className="rounded-md border border-line p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <div>
-                  <p className="text-sm font-medium">{d.specialization}</p>
-                  <p className="text-xs text-gray-500">{d.qualifications} · {d.city}</p>
+                  <p className="text-sm font-medium text-foreground">{d.specialization}</p>
+                  <p className="text-xs text-muted">{d.qualifications} · {d.city}</p>
                 </div>
-                <p className="font-mono text-xs text-gray-400">{d.user_id}</p>
+                <p className="font-mono text-xs text-muted">{d.user_id}</p>
               </div>
-              <p className="mt-2 text-sm text-gray-700">
+              <p className="mt-2 text-sm text-foreground/85">
                 License/registration number: <span className="font-medium">{d.license_number}</span>
               </p>
               {d.docUrl ? (
@@ -92,12 +96,12 @@ export default async function AdminDoctorsPage({
                   href={d.docUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-1 inline-block text-sm text-teal-700 underline underline-offset-4"
+                  className="mt-1 inline-block text-sm text-trust-dark dark:text-trust underline underline-offset-4"
                 >
                   View submitted document
                 </a>
               ) : (
-                <p className="mt-1 text-sm text-red-600">No document uploaded</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">No document uploaded</p>
               )}
 
               <form className="mt-4 flex gap-3">
@@ -106,7 +110,7 @@ export default async function AdminDoctorsPage({
                   formAction={reviewDoctorSubmission}
                   name="decision"
                   value="verified"
-                  className="rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
+                  className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
                 >
                   Approve
                 </button>
@@ -114,7 +118,7 @@ export default async function AdminDoctorsPage({
                   formAction={reviewDoctorSubmission}
                   name="decision"
                   value="rejected"
-                  className="rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
+                  className="rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-900/50 dark:text-red-300 dark:hover:bg-red-950/40"
                 >
                   Reject
                 </button>
@@ -125,17 +129,17 @@ export default async function AdminDoctorsPage({
       </section>
 
       <section className="mt-12">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
           Recently decided
         </h2>
         <div className="mt-4 space-y-2">
           {(decided ?? []).map((d) => (
             <div
               key={d.user_id}
-              className="flex items-center justify-between rounded-md border border-gray-200 px-4 py-2 text-sm"
+              className="flex items-center justify-between rounded-md border border-line px-4 py-2 text-sm"
             >
-              <span>{d.specialization} · {d.city}</span>
-              <span className="capitalize text-gray-500">{d.verification_status}</span>
+              <span className="text-foreground">{d.specialization} · {d.city}</span>
+              <span className="capitalize text-muted">{d.verification_status}</span>
             </div>
           ))}
         </div>

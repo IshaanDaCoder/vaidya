@@ -24,12 +24,27 @@ export const metadata: Metadata = {
     "Vaidya connects patients across India with verified doctors for online consultation. Your first consultation is free.",
 };
 
+const noFlashThemeScript = `
+(function () {
+  try {
+    var stored = localStorage.getItem("vaidya-theme");
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (stored === "dark" || (!stored && prefersDark)) {
+      document.documentElement.classList.add("dark");
+    }
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: noFlashThemeScript }} />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         {children}
       </body>

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f7f8f6;
   --surface: #ffffff;
@@ -9,6 +11,17 @@
   --trust: #0e6b63;
   --trust-dark: #0a4f49;
   --warmth: #c07a1f;
+}
+
+.dark {
+  --background: #0b0f0e;
+  --surface: #121715;
+  --foreground: #eef1ea;
+  --muted: #93998f;
+  --line: #262c25;
+  --trust: #35baa9;
+  --trust-dark: #145a52;
+  --warmth: #d99a3d;
 }
 
 @theme inline {
@@ -33,4 +46,8 @@ body {
 .bg-noise {
   background-image: radial-gradient(circle at 1px 1px, rgba(14, 107, 99, 0.08) 1px, transparent 0);
   background-size: 22px 22px;
+}
+
+.dark .bg-noise {
+  background-image: radial-gradient(circle at 1px 1px, rgba(53, 186, 169, 0.12) 1px, transparent 0);
 }
