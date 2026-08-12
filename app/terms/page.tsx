@@ -218,8 +218,7 @@ export default function TermsPage() {
           <p className="mt-1 text-sm leading-relaxed text-foreground/85">
             For any question, request, or grievance regarding your personal
             data or these Terms, contact our Grievance Officer at{" "}
-            <span className="font-medium">[grievance officer name and email
-            to be added]</span>. We aim to acknowledge grievances promptly and
+            <span className="font-medium">ishaanmandore333@gmail.com</span>. We aim to acknowledge grievances promptly and
             resolve them within the timelines required under applicable law.
           </p>
         </section>
@@ -282,7 +281,7 @@ export default function TermsPage() {
           <h2 className="text-lg font-semibold">15. Contact</h2>
           <p className="mt-2 text-sm leading-relaxed text-foreground/85">
             Questions about these Terms can be directed to{" "}
-            <span className="font-medium">[contact email to be added]</span>.
+            <span className="font-medium">ishaanmandore333@gmail.com</span>.
           </p>
         </section>
       </div>
