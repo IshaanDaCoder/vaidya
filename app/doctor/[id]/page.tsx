@@ -35,7 +35,9 @@ export default async function DoctorProfilePage({
   // empty, which we treat as a normal 404 rather than a special case.
   const { data: doctor } = await supabase
     .from("doctor_profiles")
-    .select("user_id, specialization, qualifications, city, bio, consultation_fee_cents")
+    .select(
+      "user_id, specialization, qualifications, city, bio, consultation_fee_cents, license_number",
+    )
     .eq("user_id", id)
     .maybeSingle();
 
@@ -85,6 +87,9 @@ export default async function DoctorProfilePage({
             {doctor.specialization} · {doctor.qualifications}
           </p>
           <p className="text-sm text-muted">{doctor.city}</p>
+          <p className="mt-1 text-xs text-muted">
+            Registration no. {doctor.license_number}
+          </p>
         </div>
         <div className="text-right">
           <p className="text-lg font-medium text-foreground">{formatFee(doctor.consultation_fee_cents)}</p>

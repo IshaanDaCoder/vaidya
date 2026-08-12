@@ -5,6 +5,7 @@ import { logout } from "@/app/(auth)/actions";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { isAdminEmail } from "@/utils/is-admin";
 import { submitReview } from "./actions";
+import { DeleteAccountSection } from "@/components/DeleteAccountSection";
 
 function formatFee(cents: number) {
   return `₹${Math.round(cents / 100)}`;
@@ -240,6 +241,8 @@ export default async function SearchPage({
           Log out
         </button>
       </form>
+
+      <DeleteAccountSection />
     </main>
   );
 }

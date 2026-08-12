@@ -5,6 +5,7 @@ import { logout } from "@/app/(auth)/actions";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { isAdminEmail } from "@/utils/is-admin";
 import { markConsultationCompleted } from "@/app/consultation/[id]/actions";
+import { DeleteAccountSection } from "@/components/DeleteAccountSection";
 
 const statusCopy: Record<string, { label: string; tone: string; note: string }> = {
   pending: {
@@ -32,7 +33,12 @@ function formatSlot(startIso: string | undefined) {
   return `${dateFmt.format(start)} · ${timeFmt.format(start)}`;
 }
 
-export default async function DoctorDashboardPage() {
+export default async function DoctorDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
   const user = await requireRole("doctor");
   const supabase = await createClient();
 
@@ -83,6 +89,12 @@ export default async function DoctorDashboardPage() {
         </div>
       </div>
       <p className="mt-2 text-sm text-muted">Signed in as {user.email}</p>
+
+      {error && (
+        <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
+          {error}
+        </p>
+      )}
 
       {!profile ? (
         <div className="mt-6 rounded-md border border-line bg-surface px-4 py-4">
@@ -184,6 +196,8 @@ export default async function DoctorDashboardPage() {
           Log out
         </button>
       </form>
+
+      <DeleteAccountSection />
     </main>
   );
 }
