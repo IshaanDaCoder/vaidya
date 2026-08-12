@@ -105,8 +105,14 @@ try {
   const clientPatB = await signIn(patientB);
   const anon = createClient(url, anonKey);
 
-  // Search visibility
-  const { data: searchable } = await anon.from("doctor_profiles").select("user_id");
+  // Search visibility — filtered to just this run's two test doctors,
+  // since production may have other real verified+subscribed doctors
+  // that would otherwise make a bare "select everything" assertion
+  // fragile against real data.
+  const { data: searchable } = await anon
+    .from("doctor_profiles")
+    .select("user_id")
+    .in("user_id", [docVId, docPId]);
   log(
     "Public search sees the verified+subscribed doctor but not the pending one",
     searchable?.length === 1 && searchable[0].user_id === docVId,
