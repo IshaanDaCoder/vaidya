@@ -178,7 +178,7 @@ export default async function DoctorDashboardPage({
             {past.map((c) => (
               <div
                 key={c.id}
-                className="flex items-center justify-between rounded-md border border-line px-4 py-3 text-sm"
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line px-4 py-3 text-sm"
               >
                 <span className="text-foreground">{nameById.get(c.patient_id) || "Patient"}</span>
                 <span className="text-xs capitalize text-muted">{c.status}</span>

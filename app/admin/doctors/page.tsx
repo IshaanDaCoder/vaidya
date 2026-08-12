@@ -139,7 +139,7 @@ export default async function AdminDoctorsPage({
           {(decided ?? []).map((d) => (
             <div
               key={d.user_id}
-              className="flex items-center justify-between rounded-md border border-line px-4 py-2 text-sm"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line px-4 py-2 text-sm"
             >
               <span className="text-foreground">{d.specialization} · {d.city}</span>
               <span className="capitalize text-muted">{d.verification_status}</span>
