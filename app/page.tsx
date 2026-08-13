@@ -167,13 +167,13 @@ export default function Home() {
         <section className="relative overflow-hidden bg-trust-dark">
           <div className="bg-noise absolute inset-0 opacity-[0.12]" />
           <div className="relative mx-auto max-w-2xl px-6 py-24 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-teal-100">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-red-100">
               For doctors
             </span>
             <h2 className="mt-6 font-serif text-2xl font-semibold text-white sm:text-3xl">
               Reach more patients, on your terms.
             </h2>
-            <p className="mt-4 text-teal-50/90">
+            <p className="mt-4 text-red-50/90">
               A patient&apos;s first consultation with Vaidya is free for
               them — you charge from their second visit onward. A
               subscription keeps you listed and discoverable to patients
@@ -181,7 +181,7 @@ export default function Home() {
             </p>
             <Link
               href="/signup?role=doctor"
-              className="mt-8 inline-block rounded-full bg-white px-7 py-3.5 text-sm font-medium text-trust-dark shadow-md transition-colors hover:bg-teal-50"
+              className="mt-8 inline-block rounded-full bg-white px-7 py-3.5 text-sm font-medium text-trust-dark shadow-md transition-colors hover:bg-red-50"
             >
               Join as a doctor
             </Link>

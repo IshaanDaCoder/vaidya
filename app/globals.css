@@ -3,24 +3,24 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f7f8f6;
+  --background: #fafafa;
   --surface: #ffffff;
-  --foreground: #14181a;
-  --muted: #5c6560;
-  --line: #e2e6df;
-  --trust: #0e6b63;
-  --trust-dark: #0a4f49;
+  --foreground: #1a1414;
+  --muted: #6b5c5c;
+  --line: #ecdede;
+  --trust: #b3261e;
+  --trust-dark: #7f1b16;
   --warmth: #c07a1f;
 }
 
 .dark {
-  --background: #0b0f0e;
-  --surface: #121715;
-  --foreground: #eef1ea;
-  --muted: #93998f;
-  --line: #262c25;
-  --trust: #35baa9;
-  --trust-dark: #145a52;
+  --background: #120b0b;
+  --surface: #1a1010;
+  --foreground: #f5eeee;
+  --muted: #a08c8c;
+  --line: #2e1c1c;
+  --trust: #ef5350;
+  --trust-dark: #b3261e;
   --warmth: #d99a3d;
 }
 
@@ -44,10 +44,10 @@ body {
 }
 
 .bg-noise {
-  background-image: radial-gradient(circle at 1px 1px, rgba(14, 107, 99, 0.08) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(179, 38, 30, 0.08) 1px, transparent 0);
   background-size: 22px 22px;
 }
 
 .dark .bg-noise {
-  background-image: radial-gradient(circle at 1px 1px, rgba(53, 186, 169, 0.12) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(239, 83, 80, 0.12) 1px, transparent 0);
 }
