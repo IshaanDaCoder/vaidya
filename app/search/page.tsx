@@ -82,6 +82,12 @@ export default async function SearchPage({
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-foreground">Find a doctor</h1>
         <div className="flex items-center gap-4">
+          <Link
+            href="/account/medical-history"
+            className="text-sm font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
+          >
+            Medical history
+          </Link>
           {isAdminEmail(user.email) && (
             <Link
               href="/admin/doctors"

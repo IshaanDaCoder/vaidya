@@ -197,13 +197,17 @@ export default function TermsPage() {
               processed, and receive a response within a reasonable time.
             </li>
           </ul>
-          <h3 className="mt-4 text-sm font-semibold">9.4 Data we do not collect</h3>
+          <h3 className="mt-4 text-sm font-semibold">9.4 Medical history you provide</h3>
           <p className="mt-1 text-sm leading-relaxed text-foreground/85">
-            At this time, Vaidya does not collect or store detailed medical
-            history or health records within the Platform itself. Any medical
-            information shared during a Consultation is shared directly
-            between Doctor and Patient and is governed by the Doctor&apos;s own
-            professional and legal obligations, not by the Platform.
+            Patients may optionally record medical history in their account —
+            current medications, past medical and surgical history, family
+            history, smoking and alcohol use, and height/weight (from which
+            BMI is calculated). This is entered voluntarily and is not
+            required to use the Platform. It is visible only to you and to a
+            Doctor you have actually booked a Consultation with — never to
+            the Platform&apos;s doctor directory as a whole, and never used
+            for any purpose other than informing that Consultation. You may
+            edit or clear this information at any time from your account.
           </p>
           <h3 className="mt-4 text-sm font-semibold">9.5 Data security</h3>
           <p className="mt-1 text-sm leading-relaxed text-foreground/85">

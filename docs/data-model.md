@@ -4,7 +4,8 @@
 |---|---|---|
 | `profiles` | `id` (→ auth.users), `role` (`doctor` \| `patient`), `full_name`, `phone`, `consent_given_at`, `created_at` | Base identity row for every user, either role |
 | `doctor_profiles` | `user_id`, `specialization`, `qualifications`, `license_number`, `license_document_path`, `verification_status` (`pending`\|`verified`\|`rejected`), `city`, `bio`, `consultation_fee_cents` | `city` is free text — no fixed launch list |
-| `patient_profiles` | `user_id`, `date_of_birth`, `gender`, `city`, `has_used_free_consultation` | Deliberately minimal — no health history collected at launch |
+| `patient_profiles` | `user_id`, `date_of_birth`, `gender`, `city`, `has_used_free_consultation` | |
+| `patient_medical_history` | `user_id`, `medications`, `past_medical_history`, `past_surgical_history`, `family_history`, `smoking_status`, `alcohol_use`, `height_cm`, `weight_kg`, `bmi` (generated) | Patient-reported, optional; kept separate from `patient_profiles` so its RLS can be audited in isolation |
 | `availability_slots` | `id`, `doctor_id`, `start_time`, `end_time`, `is_booked` | One row per bookable slot |
 | `consultations` | `id`, `doctor_id`, `patient_id`, `slot_id`, `status` (`scheduled`\|`completed`\|`cancelled`\|`no_show`), `is_free`, `fee_cents`, `razorpay_payment_id`, `video_room_url`, `created_at` | Written server-side only, from the booking action and the Razorpay webhook |
 | `doctor_subscriptions` | `doctor_id`, `razorpay_subscription_id`, `status`, `current_period_end` | Gates search visibility when combined with `verification_status` |
@@ -12,7 +13,10 @@
 
 ## Row Level Security summary
 
-- `profiles`, `patient_profiles`: owner-only read/write (`auth.uid() = user_id`).
+- `profiles`, `patient_profiles`, `patient_medical_history`: owner-only
+  read/write (`auth.uid() = user_id`), plus read access for a doctor with an
+  actual `consultations` row linking them to that patient — never a full
+  patient directory.
 - `doctor_profiles`: owner read/write for their own row; **public** read only
   for rows that are `verified` and have an active subscription (join against
   `doctor_subscriptions`).
@@ -26,7 +30,5 @@
 
 ## Explicitly deferred (not in this schema for launch)
 
-- Health history / EHR fields on `patient_profiles` — out of scope until
-  there's a real plan for handling that data under DPDP.
 - Multi-slot recurring availability templates — Day 6 ships one-off slots.
 - An audit-log table for consultation record access — cut-list item.
