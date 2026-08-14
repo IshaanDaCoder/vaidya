@@ -58,6 +58,19 @@ export async function login(formData: FormData) {
   redirect(await getPostAuthRedirect(supabase));
 }
 
+// Google's Supabase provider defaults to a scope set that already
+// includes email, but Azure's does not — its default authorize request
+// only asks for "openid", which gets a token with no permission to read
+// the user's profile. Supabase then tries to call Microsoft Graph's
+// /me endpoint to fetch the email and fails with "Error getting user
+// email from external provider" — a real, reproduced bug, not a config
+// typo. Requesting "email" and "profile" explicitly here is what fixes
+// it; the API permission grant in Azure alone was not sufficient,
+// because that just makes the scope available, it doesn't request it.
+const OAUTH_SCOPES: Partial<Record<"google" | "azure", string>> = {
+  azure: "openid email profile",
+};
+
 async function signInWithOAuthProvider(
   provider: "google" | "azure",
   label: string,
@@ -76,7 +89,10 @@ async function signInWithOAuthProvider(
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
-    options: { redirectTo: `${origin}/auth/callback` },
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+      scopes: OAUTH_SCOPES[provider],
+    },
   });
 
   if (error || !data.url) {
