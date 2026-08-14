@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { isAdminEmail } from "@/utils/is-admin";
 import { submitReview } from "./actions";
 import { DeleteAccountSection } from "@/components/DeleteAccountSection";
+import { AddToCalendarLinks } from "@/components/AddToCalendarLinks";
 
 function formatFee(cents: number) {
   return `₹${Math.round(cents / 100)}`;
@@ -63,7 +64,10 @@ export default async function SearchPage({
       : { data: [] };
   const { data: consultSlots } =
     consultSlotIds.length > 0
-      ? await supabase.from("availability_slots").select("id, start_time").in("id", consultSlotIds)
+      ? await supabase
+          .from("availability_slots")
+          .select("id, start_time, end_time")
+          .in("id", consultSlotIds)
       : { data: [] };
   const { data: myReviews } = await supabase
     .from("reviews")
@@ -72,7 +76,9 @@ export default async function SearchPage({
 
   const doctorNameById = new Map((consultDoctors ?? []).map((d) => [d.id, d.full_name]));
   const slotStartById = new Map((consultSlots ?? []).map((s) => [s.id, s.start_time]));
+  const slotEndById = new Map((consultSlots ?? []).map((s) => [s.id, s.end_time]));
   const reviewedConsultIds = new Set((myReviews ?? []).map((r) => r.consultation_id));
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
   const upcoming = (consultations ?? []).filter((c) => c.status === "scheduled");
   const past = (consultations ?? []).filter((c) => c.status !== "scheduled");
@@ -113,27 +119,44 @@ export default async function SearchPage({
             My consultations
           </h2>
           <div className="mt-3 space-y-3">
-            {upcoming.map((c) => (
-              <div key={c.id} className="rounded-md border border-line px-4 py-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">
-                      {doctorNameById.get(c.doctor_id) || "Doctor"}
-                    </p>
-                    <p className="text-xs text-muted">
-                      {formatSlot(slotStartById.get(c.slot_id ?? ""))} ·{" "}
-                      {c.is_free ? "Free consultation" : `₹${Math.round(c.fee_cents / 100)}`}
-                    </p>
+            {upcoming.map((c) => {
+              const doctorName = doctorNameById.get(c.doctor_id) || "Doctor";
+              const start = slotStartById.get(c.slot_id ?? "");
+              const end = slotEndById.get(c.slot_id ?? "");
+              return (
+                <div key={c.id} className="rounded-md border border-line px-4 py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{doctorName}</p>
+                      <p className="text-xs text-muted">
+                        {formatSlot(start)} ·{" "}
+                        {c.is_free ? "Free consultation" : `₹${Math.round(c.fee_cents / 100)}`}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/consultation/${c.id}`}
+                      className="rounded-md bg-trust px-3 py-1.5 text-xs font-medium text-white hover:bg-trust-dark"
+                    >
+                      Join call
+                    </Link>
                   </div>
-                  <Link
-                    href={`/consultation/${c.id}`}
-                    className="rounded-md bg-trust px-3 py-1.5 text-xs font-medium text-white hover:bg-trust-dark"
-                  >
-                    Join call
-                  </Link>
+                  {start && end && (
+                    <div className="mt-3">
+                      <AddToCalendarLinks
+                        consultationId={c.id}
+                        event={{
+                          title: `Consultation with ${doctorName} — Vaidya`,
+                          description: `Your Vaidya consultation. Join here: ${siteUrl}/consultation/${c.id}`,
+                          location: `${siteUrl}/consultation/${c.id}`,
+                          start: new Date(start),
+                          end: new Date(end),
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {past.map((c) =>
               c.status === "completed" && !reviewedConsultIds.has(c.id) ? (
                 <div key={c.id} className="rounded-md border border-line px-4 py-3">

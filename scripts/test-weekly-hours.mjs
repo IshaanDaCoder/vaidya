@@ -109,7 +109,7 @@ try {
     .eq("doctor_id", docWithProfile.user.id);
   log("A different doctor cannot read another doctor's weekly hours", otherSees?.length === 0);
 
-  const { error: otherWritesErr } = await otherClient
+  await otherClient
     .from("doctor_weekly_hours")
     .update({ start_time: "06:00" })
     .eq("doctor_id", docWithProfile.user.id);

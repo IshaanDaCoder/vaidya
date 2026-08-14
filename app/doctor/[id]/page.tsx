@@ -117,10 +117,16 @@ export default async function DoctorProfilePage({
           {(slots ?? []).map((s) => (
             <div
               key={s.id}
-              className="flex items-center justify-between rounded-md border border-line px-4 py-3 text-sm"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line px-4 py-3 text-sm"
             >
               <span className="text-foreground">{formatSlot(s.start_time, s.end_time)}</span>
-              <BookSlotButton doctorId={id} slotId={s.id} />
+              <BookSlotButton
+                doctorId={id}
+                slotId={s.id}
+                doctorName={profile?.full_name || `Dr. ${doctor.specialization}`}
+                startTime={s.start_time}
+                endTime={s.end_time}
+              />
             </div>
           ))}
         </div>
