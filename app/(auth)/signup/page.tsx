@@ -82,8 +82,19 @@ export default async function SignupPage({
 
         <label className="flex items-start gap-2 text-xs text-muted">
           <input type="checkbox" name="consent" required className="mt-0.5" />
-          I agree to Vaidya processing my personal data to provide this service,
-          in line with the privacy policy.
+          <span>
+            I agree to the{" "}
+            <Link
+              href="/terms"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
+            >
+              Terms and Conditions
+            </Link>{" "}
+            and consent to Vaidya processing my personal data to provide this
+            service.
+          </span>
         </label>
 
         <button
@@ -121,13 +132,6 @@ export default async function SignupPage({
         </Link>
       </p>
 
-      <p className="mt-8 text-center text-xs text-muted">
-        While signing up, you are consenting to the{" "}
-        <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">
-          Terms and Conditions
-        </Link>
-        .
-      </p>
     </main>
   );
 }
