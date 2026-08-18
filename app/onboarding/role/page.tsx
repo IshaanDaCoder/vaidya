@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { BrandHeader } from "@/components/ui/BrandHeader";
 import { Alert } from "@/components/ui/Alert";
-import { heading, link, buttonVariants } from "@/components/ui/styles";
+import { heading, link } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 import { chooseRole } from "./actions";
 
 export default async function ChooseRolePage({
@@ -73,9 +74,9 @@ export default async function ChooseRolePage({
               </span>
             </label>
 
-            <button formAction={chooseRole} className={`w-full ${buttonVariants("primary")}`}>
+            <SubmitButton formAction={chooseRole} pendingText="Continuing…" className="w-full">
               Continue
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </div>

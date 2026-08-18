@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BrandHeader } from "@/components/ui/BrandHeader";
 import { Alert } from "@/components/ui/Alert";
-import { heading, input, label, link, buttonVariants } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
+import { heading, input, label, link } from "@/components/ui/styles";
 import { login, signInWithGoogle, signInWithMicrosoft } from "../actions";
 
 export default async function LoginPage({
@@ -44,9 +45,9 @@ export default async function LoginPage({
               <input id="password" name="password" type="password" required className={input} />
             </div>
 
-            <button formAction={login} className={`mt-2 w-full ${buttonVariants("primary")}`}>
+            <SubmitButton formAction={login} pendingText="Logging in…" className="mt-2 w-full">
               Log in
-            </button>
+            </SubmitButton>
           </form>
 
           <div className="mt-6 flex flex-col gap-2">
@@ -56,14 +57,14 @@ export default async function LoginPage({
               <span className="h-px flex-1 bg-line" />
             </div>
             <form>
-              <button formAction={signInWithGoogle} className={`w-full ${buttonVariants("secondary")}`}>
+              <SubmitButton formAction={signInWithGoogle} variant="secondary" className="w-full">
                 Google
-              </button>
+              </SubmitButton>
             </form>
             <form>
-              <button formAction={signInWithMicrosoft} className={`w-full ${buttonVariants("secondary")}`}>
+              <SubmitButton formAction={signInWithMicrosoft} variant="secondary" className="w-full">
                 Microsoft
-              </button>
+              </SubmitButton>
             </form>
           </div>
         </div>

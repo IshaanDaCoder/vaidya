@@ -3,13 +3,13 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fafafa;
-  --surface: #ffffff;
-  --foreground: #1a1414;
-  --muted: #6b5c5c;
-  --line: #ecdede;
-  --trust: #b3261e;
-  --trust-dark: #7f1b16;
+  --background: #ffffff;
+  --surface: #f7fbfc;
+  --foreground: #101820;
+  --muted: #57707a;
+  --line: #dbe7ec;
+  --trust: #0891b2;
+  --trust-dark: #0e7490;
   --warmth: #c07a1f;
 }
 
@@ -44,7 +44,7 @@ body {
 }
 
 .bg-noise {
-  background-image: radial-gradient(circle at 1px 1px, rgba(179, 38, 30, 0.08) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(8, 145, 178, 0.09) 1px, transparent 0);
   background-size: 22px 22px;
 }
 

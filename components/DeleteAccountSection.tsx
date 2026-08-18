@@ -1,5 +1,5 @@
 import { deleteAccount } from "@/app/account/actions";
-import { buttonVariants } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export function DeleteAccountSection() {
   return (
@@ -21,9 +21,9 @@ export function DeleteAccountSection() {
             required
             className="rounded-lg border border-line bg-surface px-3.5 py-2 text-sm text-foreground outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
           />
-          <button formAction={deleteAccount} className={buttonVariants("danger", "sm")}>
+          <SubmitButton formAction={deleteAccount} variant="danger" size="sm" pendingText="Deleting…">
             Permanently delete
-          </button>
+          </SubmitButton>
         </form>
       </div>
     </details>

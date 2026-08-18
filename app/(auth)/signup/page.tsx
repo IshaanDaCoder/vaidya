@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BrandHeader } from "@/components/ui/BrandHeader";
 import { Alert } from "@/components/ui/Alert";
-import { heading, input, label, link, buttonVariants } from "@/components/ui/styles";
+import { heading, input, label, link } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 import { signInWithGoogle, signInWithMicrosoft, signup } from "../actions";
 
 export default async function SignupPage({
@@ -85,9 +86,9 @@ export default async function SignupPage({
               </span>
             </label>
 
-            <button formAction={signup} className={`mt-1 w-full ${buttonVariants("primary")}`}>
+            <SubmitButton formAction={signup} pendingText="Creating account…" className="mt-1 w-full">
               Sign up
-            </button>
+            </SubmitButton>
           </form>
 
           <div className="mt-6 flex flex-col gap-2">
@@ -97,14 +98,14 @@ export default async function SignupPage({
               <span className="h-px flex-1 bg-line" />
             </div>
             <form>
-              <button formAction={signInWithGoogle} className={`w-full ${buttonVariants("secondary")}`}>
+              <SubmitButton formAction={signInWithGoogle} variant="secondary" className="w-full">
                 Google
-              </button>
+              </SubmitButton>
             </form>
             <form>
-              <button formAction={signInWithMicrosoft} className={`w-full ${buttonVariants("secondary")}`}>
+              <SubmitButton formAction={signInWithMicrosoft} variant="secondary" className="w-full">
                 Microsoft
-              </button>
+              </SubmitButton>
             </form>
           </div>
         </div>

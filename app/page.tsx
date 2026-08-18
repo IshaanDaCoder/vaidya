@@ -76,7 +76,7 @@ export default function Home() {
             </Link>
             <Link
               href="/signup?role=patient"
-              className="rounded-full bg-trust px-4 py-2 font-medium text-white shadow-sm shadow-trust/20 transition-colors hover:bg-trust-dark"
+              className="rounded-full bg-trust px-4 py-2 font-medium text-white shadow-sm shadow-trust/20 transition-all duration-150 hover:-translate-y-0.5 hover:bg-trust-dark hover:shadow-md hover:shadow-trust/30 active:scale-[0.97]"
             >
               Sign up
             </Link>
@@ -88,7 +88,11 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero */}
         <section className="bg-noise relative overflow-hidden border-b border-line">
-          <div className="mx-auto max-w-3xl px-6 py-28 text-center">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-0 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-trust/15 blur-[110px] dark:bg-trust/20"
+          />
+          <div className="relative mx-auto max-w-3xl px-6 py-28 text-center">
             <Logo size={52} className="mx-auto drop-shadow-[0_8px_20px_rgba(138,67,15,0.28)]" />
             <span className="mt-7 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-trust-dark dark:text-trust">
               Now connecting patients &amp; doctors across India
@@ -106,13 +110,13 @@ export default function Home() {
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href="/signup?role=patient"
-                className="w-full rounded-full bg-trust px-7 py-3.5 text-center text-sm font-medium text-white shadow-md shadow-trust/25 transition-colors hover:bg-trust-dark sm:w-auto"
+                className="w-full rounded-full bg-trust px-7 py-3.5 text-center text-sm font-medium text-white shadow-md shadow-trust/25 transition-all duration-150 hover:-translate-y-0.5 hover:bg-trust-dark hover:shadow-lg hover:shadow-trust/35 active:scale-[0.97] sm:w-auto"
               >
                 I&apos;m a patient
               </Link>
               <Link
                 href="/signup?role=doctor"
-                className="w-full rounded-full border border-line bg-surface px-7 py-3.5 text-center text-sm font-medium text-foreground transition-colors hover:border-trust hover:text-trust-dark dark:hover:text-trust sm:w-auto"
+                className="w-full rounded-full border border-line bg-surface px-7 py-3.5 text-center text-sm font-medium text-foreground shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:border-trust hover:text-trust-dark hover:shadow-md active:scale-[0.97] dark:hover:text-trust sm:w-auto"
               >
                 I&apos;m a doctor
               </Link>
@@ -149,7 +153,7 @@ export default function Home() {
               {trustPoints.map((t) => (
                 <div
                   key={t.title}
-                  className="rounded-xl border border-line bg-background p-7 transition-shadow hover:shadow-sm"
+                  className="rounded-xl border border-line bg-background p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-trust/40 hover:shadow-lg hover:shadow-trust/10"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -172,13 +176,13 @@ export default function Home() {
         <section className="relative overflow-hidden bg-trust-dark">
           <div className="bg-noise absolute inset-0 opacity-[0.12]" />
           <div className="relative mx-auto max-w-2xl px-6 py-24 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-red-100">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-sky-100">
               For doctors
             </span>
             <h2 className="mt-6 font-serif text-2xl font-semibold text-white sm:text-3xl">
               Reach more patients, on your terms.
             </h2>
-            <p className="mt-4 text-red-50/90">
+            <p className="mt-4 text-sky-50/90">
               A patient&apos;s first consultation with Vaidya is free for
               them — you charge from their second visit onward. A
               subscription keeps you listed and discoverable to patients
@@ -186,7 +190,7 @@ export default function Home() {
             </p>
             <Link
               href="/signup?role=doctor"
-              className="mt-8 inline-block rounded-full bg-white px-7 py-3.5 text-sm font-medium text-trust-dark shadow-md transition-colors hover:bg-red-50"
+              className="mt-8 inline-block rounded-full bg-white px-7 py-3.5 text-sm font-medium text-trust-dark shadow-md transition-all duration-150 hover:-translate-y-0.5 hover:bg-sky-50 hover:shadow-lg active:scale-[0.97]"
             >
               Join as a doctor
             </Link>

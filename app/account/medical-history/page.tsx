@@ -4,7 +4,8 @@ import { updateMedicalHistory, updatePatientProfile } from "./actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Alert } from "@/components/ui/Alert";
-import { card, input, label, buttonVariants } from "@/components/ui/styles";
+import { card, input, label } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 function calculateAge(dateOfBirth: string | null) {
   if (!dateOfBirth) return null;
@@ -99,9 +100,9 @@ export default async function MedicalHistoryPage({
             <input id="city" name="city" type="text" defaultValue={profile?.city ?? ""} required className={input} />
           </div>
           <div className="sm:col-span-2">
-            <button formAction={updatePatientProfile} className={buttonVariants("primary")}>
+            <SubmitButton formAction={updatePatientProfile} pendingText="Saving…">
               Save basic information
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </section>
@@ -232,9 +233,9 @@ export default async function MedicalHistoryPage({
             </div>
           </div>
 
-          <button formAction={updateMedicalHistory} className={buttonVariants("primary")}>
+          <SubmitButton formAction={updateMedicalHistory} pendingText="Saving…">
             Save medical history
-          </button>
+          </SubmitButton>
         </form>
       </section>
     </main>

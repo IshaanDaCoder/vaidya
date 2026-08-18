@@ -33,17 +33,19 @@ export function buttonVariants(
   size: ButtonSize = "md",
 ) {
   const base =
-    "inline-flex items-center justify-center gap-2 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60";
+    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-150 ease-out active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-trust/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
   const sizes: Record<ButtonSize, string> = {
     md: "rounded-full px-5 py-2.5 text-sm",
     sm: "rounded-full px-3.5 py-1.5 text-xs",
   };
   const variants: Record<ButtonVariant, string> = {
-    primary: "bg-trust text-white shadow-sm shadow-trust/25 hover:bg-trust-dark",
+    primary:
+      "bg-trust text-white shadow-md shadow-trust/25 hover:-translate-y-0.5 hover:bg-trust-dark hover:shadow-lg hover:shadow-trust/35",
     secondary:
-      "border border-line bg-surface text-foreground hover:border-trust hover:text-trust-dark dark:hover:text-trust",
+      "border border-line bg-surface text-foreground shadow-sm hover:-translate-y-0.5 hover:border-trust hover:text-trust-dark hover:shadow-md dark:hover:text-trust",
     ghost: "text-muted hover:text-foreground",
-    danger: "bg-red-700 text-white shadow-sm shadow-red-700/20 hover:bg-red-800",
+    danger:
+      "bg-red-700 text-white shadow-md shadow-red-700/20 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-lg hover:shadow-red-700/30",
   };
   return `${base} ${sizes[size]} ${variants[variant]}`;
 }

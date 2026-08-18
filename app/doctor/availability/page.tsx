@@ -11,6 +11,7 @@ import { AppHeader } from "@/components/ui/AppHeader";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Alert } from "@/components/ui/Alert";
 import { card, input, label, buttonVariants } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 const DAY_LABELS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -174,15 +175,15 @@ export default async function AvailabilityPage({
             })}
           </div>
 
-          <button formAction={saveWeeklyHours} className={buttonVariants("primary")}>
+          <SubmitButton formAction={saveWeeklyHours} pendingText="Saving…">
             Save hours
-          </button>
+          </SubmitButton>
         </form>
 
         <form className="mt-3">
-          <button formAction={generateSlotsFromHours} className={buttonVariants("secondary")}>
+          <SubmitButton formAction={generateSlotsFromHours} variant="secondary" pendingText="Generating…">
             Generate slots for the next 3 weeks
-          </button>
+          </SubmitButton>
           <p className="mt-1.5 text-xs text-muted">
             Fills in bookable slots from your saved hours. Safe to click again later —
             it only adds what&apos;s missing, never duplicates.
@@ -206,9 +207,9 @@ export default async function AvailabilityPage({
             </label>
             <input id="endTime" name="endTime" type="datetime-local" required className={input} />
           </div>
-          <button formAction={addAvailabilitySlot} className={buttonVariants("primary")}>
+          <SubmitButton formAction={addAvailabilitySlot} pendingText="Adding…">
             Add slot
-          </button>
+          </SubmitButton>
         </form>
       </section>
 

@@ -4,7 +4,8 @@ import { submitDoctorProfile } from "./actions";
 import { BrandHeader } from "@/components/ui/BrandHeader";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
-import { heading, input, label, buttonVariants } from "@/components/ui/styles";
+import { heading, input, label } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export default async function DoctorOnboardingPage({
   searchParams,
@@ -135,9 +136,9 @@ export default async function DoctorOnboardingPage({
             <textarea id="bio" name="bio" rows={4} defaultValue={existing?.bio ?? ""} className={input} />
           </div>
 
-          <button formAction={submitDoctorProfile} className={`w-full ${buttonVariants("primary")}`}>
+          <SubmitButton formAction={submitDoctorProfile} pendingText="Submitting…" className="w-full">
             {existing ? "Save changes" : "Submit for verification"}
-          </button>
+          </SubmitButton>
         </form>
       </div>
     </main>

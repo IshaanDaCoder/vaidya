@@ -10,6 +10,7 @@ import { AppHeader } from "@/components/ui/AppHeader";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Alert } from "@/components/ui/Alert";
 import { input, label, link, buttonVariants, cardInteractive, listRow } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 function formatFee(cents: number) {
   return `₹${Math.round(cents / 100)}`;
@@ -175,9 +176,9 @@ export default async function SearchPage({
                       placeholder="Optional comment"
                       className={`${input} min-w-[200px] flex-1`}
                     />
-                    <button formAction={submitReview} className={buttonVariants("primary", "sm")}>
+                    <SubmitButton formAction={submitReview} size="sm" pendingText="Submitting…">
                       Submit review
-                    </button>
+                    </SubmitButton>
                   </form>
                 </div>
               ) : (

@@ -6,7 +6,8 @@ import { reviewDoctorSubmission } from "./actions";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Alert } from "@/components/ui/Alert";
-import { buttonVariants, link, listRow } from "@/components/ui/styles";
+import { link, listRow } from "@/components/ui/styles";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 async function withSignedDocUrl(
   admin: ReturnType<typeof createAdminClient>,
@@ -98,16 +99,16 @@ export default async function AdminDoctorsPage({
                 <form>
                   <input type="hidden" name="doctorId" value={d.user_id} />
                   <input type="hidden" name="decision" value="verified" />
-                  <button formAction={reviewDoctorSubmission} className={buttonVariants("primary", "sm")}>
+                  <SubmitButton formAction={reviewDoctorSubmission} size="sm" pendingText="Approving…">
                     Approve
-                  </button>
+                  </SubmitButton>
                 </form>
                 <form>
                   <input type="hidden" name="doctorId" value={d.user_id} />
                   <input type="hidden" name="decision" value="rejected" />
                   <button
                     formAction={reviewDoctorSubmission}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-red-300 px-3.5 py-1.5 text-xs font-medium text-red-700 transition-colors hover:bg-red-50 dark:border-red-900/50 dark:text-red-300 dark:hover:bg-red-950/40"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-red-300 px-3.5 py-1.5 text-xs font-medium text-red-700 transition-all duration-150 hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-md active:scale-[0.97] dark:border-red-900/50 dark:text-red-300 dark:hover:bg-red-950/40"
                   >
                     Reject
                   </button>
