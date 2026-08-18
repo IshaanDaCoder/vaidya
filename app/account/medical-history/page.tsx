@@ -1,8 +1,10 @@
-import Link from "next/link";
 import { requireRole } from "@/utils/require-role";
 import { createClient } from "@/utils/supabase/server";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { updateMedicalHistory, updatePatientProfile } from "./actions";
+import { AppHeader } from "@/components/ui/AppHeader";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Alert } from "@/components/ui/Alert";
+import { card, input, label, buttonVariants } from "@/components/ui/styles";
 
 function calculateAge(dateOfBirth: string | null) {
   if (!dateOfBirth) return null;
@@ -41,40 +43,30 @@ export default async function MedicalHistoryPage({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">Medical history</h1>
-        <ThemeToggle />
-      </div>
-      <p className="mt-2 text-sm text-muted">
-        This is shared with a doctor only once you&apos;ve booked a consultation with them —
-        never with the full doctor directory.
-      </p>
-      <Link
-        href="/search"
-        className="mt-2 inline-block text-sm text-trust-dark underline underline-offset-4 dark:text-trust"
-      >
-        Back to search
-      </Link>
+      <AppHeader
+        title="Medical history"
+        description="Shared with a doctor only once you've booked a consultation with them — never with the full doctor directory."
+        backHref="/search"
+        backLabel="Back to search"
+      />
 
       {saved && (
-        <p className="mt-6 rounded-md border border-trust/30 bg-trust/10 px-4 py-3 text-sm text-trust-dark dark:text-trust">
-          Saved.
-        </p>
+        <div className="mt-6">
+          <Alert tone="success">Saved.</Alert>
+        </div>
       )}
       {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </p>
+        <div className="mt-6">
+          <Alert tone="error">{error}</Alert>
+        </div>
       )}
 
       {/* Basic info: age, gender, city */}
       <section className="mt-8">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Basic information
-        </h2>
-        <form className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <SectionHeading>Basic information</SectionHeading>
+        <form className={`mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 ${card}`}>
           <div>
-            <label htmlFor="dateOfBirth" className="text-xs text-muted">
+            <label htmlFor="dateOfBirth" className={label}>
               Date of birth {age !== null && <span className="text-foreground/70">(Age {age})</span>}
             </label>
             <input
@@ -83,20 +75,14 @@ export default async function MedicalHistoryPage({
               type="date"
               defaultValue={profile?.date_of_birth ?? ""}
               required
-              className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+              className={input}
             />
           </div>
           <div>
-            <label htmlFor="gender" className="text-xs text-muted">
+            <label htmlFor="gender" className={label}>
               Gender
             </label>
-            <select
-              id="gender"
-              name="gender"
-              defaultValue={profile?.gender ?? ""}
-              required
-              className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-            >
+            <select id="gender" name="gender" defaultValue={profile?.gender ?? ""} required className={input}>
               <option value="" disabled>
                 Select
               </option>
@@ -107,23 +93,13 @@ export default async function MedicalHistoryPage({
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="city" className="text-xs text-muted">
+            <label htmlFor="city" className={label}>
               City
             </label>
-            <input
-              id="city"
-              name="city"
-              type="text"
-              defaultValue={profile?.city ?? ""}
-              required
-              className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-            />
+            <input id="city" name="city" type="text" defaultValue={profile?.city ?? ""} required className={input} />
           </div>
           <div className="sm:col-span-2">
-            <button
-              formAction={updatePatientProfile}
-              className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-            >
+            <button formAction={updatePatientProfile} className={buttonVariants("primary")}>
               Save basic information
             </button>
           </div>
@@ -132,141 +108,133 @@ export default async function MedicalHistoryPage({
 
       {/* Height, weight, BMI */}
       <section className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Height &amp; weight
-        </h2>
-        <form className="mt-4 flex flex-wrap items-end gap-4">
+        <SectionHeading>Height &amp; weight</SectionHeading>
+        <form className={`mt-4 space-y-5 ${card}`}>
+          <div className="flex flex-wrap items-end gap-4">
+            <div>
+              <label htmlFor="heightCm" className={label}>
+                Height (cm)
+              </label>
+              <input
+                id="heightCm"
+                name="heightCm"
+                type="number"
+                step="0.1"
+                min="0"
+                defaultValue={history?.height_cm ?? ""}
+                className={`${input} w-32`}
+              />
+            </div>
+            <div>
+              <label htmlFor="weightKg" className={label}>
+                Weight (kg)
+              </label>
+              <input
+                id="weightKg"
+                name="weightKg"
+                type="number"
+                step="0.1"
+                min="0"
+                defaultValue={history?.weight_kg ?? ""}
+                className={`${input} w-32`}
+              />
+            </div>
+            {history?.bmi != null && (
+              <div className="rounded-lg border border-trust/25 bg-trust/10 px-4 py-2.5">
+                <span className="text-xs text-muted">BMI</span>
+                <p className="text-sm font-medium tabular-nums text-trust-dark dark:text-trust">
+                  {history.bmi}
+                </p>
+              </div>
+            )}
+          </div>
+
           <div>
-            <label htmlFor="heightCm" className="text-xs text-muted">
-              Height (cm)
+            <label htmlFor="medications" className={label}>
+              Current medications
             </label>
-            <input
-              id="heightCm"
-              name="heightCm"
-              type="number"
-              step="0.1"
-              min="0"
-              defaultValue={history?.height_cm ?? ""}
-              className="mt-1 w-32 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+            <textarea
+              id="medications"
+              name="medications"
+              rows={2}
+              placeholder="e.g. Metformin 500mg twice daily"
+              defaultValue={history?.medications ?? ""}
+              className={input}
             />
           </div>
           <div>
-            <label htmlFor="weightKg" className="text-xs text-muted">
-              Weight (kg)
+            <label htmlFor="pastMedicalHistory" className={label}>
+              Past medical history
             </label>
-            <input
-              id="weightKg"
-              name="weightKg"
-              type="number"
-              step="0.1"
-              min="0"
-              defaultValue={history?.weight_kg ?? ""}
-              className="mt-1 w-32 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+            <textarea
+              id="pastMedicalHistory"
+              name="pastMedicalHistory"
+              rows={2}
+              placeholder="e.g. Type 2 diabetes, diagnosed 2019"
+              defaultValue={history?.past_medical_history ?? ""}
+              className={input}
             />
           </div>
-          {history?.bmi != null && (
-            <div className="rounded-md border border-line bg-surface px-4 py-2">
-              <span className="text-xs text-muted">BMI</span>
-              <p className="text-sm font-medium text-foreground">{history.bmi}</p>
-            </div>
-          )}
-          {/* medications etc. below share this same form */}
-          <div className="w-full space-y-4">
-            <div>
-              <label htmlFor="medications" className="text-xs text-muted">
-                Current medications
-              </label>
-              <textarea
-                id="medications"
-                name="medications"
-                rows={2}
-                placeholder="e.g. Metformin 500mg twice daily"
-                defaultValue={history?.medications ?? ""}
-                className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-              />
-            </div>
-            <div>
-              <label htmlFor="pastMedicalHistory" className="text-xs text-muted">
-                Past medical history
-              </label>
-              <textarea
-                id="pastMedicalHistory"
-                name="pastMedicalHistory"
-                rows={2}
-                placeholder="e.g. Type 2 diabetes, diagnosed 2019"
-                defaultValue={history?.past_medical_history ?? ""}
-                className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-              />
-            </div>
-            <div>
-              <label htmlFor="pastSurgicalHistory" className="text-xs text-muted">
-                Past surgical history
-              </label>
-              <textarea
-                id="pastSurgicalHistory"
-                name="pastSurgicalHistory"
-                rows={2}
-                placeholder="e.g. Appendectomy, 2015"
-                defaultValue={history?.past_surgical_history ?? ""}
-                className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-              />
-            </div>
-            <div>
-              <label htmlFor="familyHistory" className="text-xs text-muted">
-                Family history
-              </label>
-              <textarea
-                id="familyHistory"
-                name="familyHistory"
-                rows={2}
-                placeholder="e.g. Father: hypertension, Mother: none known"
-                defaultValue={history?.family_history ?? ""}
-                className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="smokingStatus" className="text-xs text-muted">
-                  Smoking
-                </label>
-                <select
-                  id="smokingStatus"
-                  name="smokingStatus"
-                  defaultValue={history?.smoking_status ?? ""}
-                  className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-                >
-                  <option value="">Prefer not to say</option>
-                  <option value="never">Never smoked</option>
-                  <option value="former">Former smoker</option>
-                  <option value="current">Current smoker</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="alcoholUse" className="text-xs text-muted">
-                  Alcohol
-                </label>
-                <select
-                  id="alcoholUse"
-                  name="alcoholUse"
-                  defaultValue={history?.alcohol_use ?? ""}
-                  className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-                >
-                  <option value="">Prefer not to say</option>
-                  <option value="never">Never</option>
-                  <option value="occasional">Occasional</option>
-                  <option value="regular">Regular</option>
-                </select>
-              </div>
-            </div>
-
-            <button
-              formAction={updateMedicalHistory}
-              className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-            >
-              Save medical history
-            </button>
+          <div>
+            <label htmlFor="pastSurgicalHistory" className={label}>
+              Past surgical history
+            </label>
+            <textarea
+              id="pastSurgicalHistory"
+              name="pastSurgicalHistory"
+              rows={2}
+              placeholder="e.g. Appendectomy, 2015"
+              defaultValue={history?.past_surgical_history ?? ""}
+              className={input}
+            />
           </div>
+          <div>
+            <label htmlFor="familyHistory" className={label}>
+              Family history
+            </label>
+            <textarea
+              id="familyHistory"
+              name="familyHistory"
+              rows={2}
+              placeholder="e.g. Father: hypertension, Mother: none known"
+              defaultValue={history?.family_history ?? ""}
+              className={input}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="smokingStatus" className={label}>
+                Smoking
+              </label>
+              <select
+                id="smokingStatus"
+                name="smokingStatus"
+                defaultValue={history?.smoking_status ?? ""}
+                className={input}
+              >
+                <option value="">Prefer not to say</option>
+                <option value="never">Never smoked</option>
+                <option value="former">Former smoker</option>
+                <option value="current">Current smoker</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="alcoholUse" className={label}>
+                Alcohol
+              </label>
+              <select id="alcoholUse" name="alcoholUse" defaultValue={history?.alcohol_use ?? ""} className={input}>
+                <option value="">Prefer not to say</option>
+                <option value="never">Never</option>
+                <option value="occasional">Occasional</option>
+                <option value="regular">Regular</option>
+              </select>
+            </div>
+          </div>
+
+          <button formAction={updateMedicalHistory} className={buttonVariants("primary")}>
+            Save medical history
+          </button>
         </form>
       </section>
     </main>

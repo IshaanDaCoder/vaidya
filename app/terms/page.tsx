@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Logo } from "@/components/ui/Logo";
 
 export const metadata = {
   title: "Terms and Conditions — Vaidya",
@@ -9,12 +10,15 @@ export default function TermsPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <div className="flex items-center justify-between">
-        <Link href="/" className="font-serif text-lg font-semibold text-trust-dark">
-          Vaidya
+        <Link href="/" className="flex items-center gap-2.5">
+          <Logo size={28} />
+          <span className="font-serif text-lg font-semibold text-trust-dark dark:text-trust">Vaidya</span>
         </Link>
         <ThemeToggle />
       </div>
-      <h1 className="mt-6 text-3xl font-semibold text-foreground">Terms and Conditions</h1>
+      <h1 className="mt-8 font-serif text-3xl font-semibold tracking-tight text-foreground">
+        Terms and Conditions
+      </h1>
       <p className="mt-2 text-sm text-muted">Last updated: 10 August 2026</p>
 
       <div className="prose prose-sm mt-10 max-w-none space-y-8 text-foreground">

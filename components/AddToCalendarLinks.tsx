@@ -18,7 +18,7 @@ export function AddToCalendarLinks({
   consultationId: string;
 }) {
   const linkClass =
-    "rounded-md border border-line px-3 py-1.5 text-xs font-medium text-foreground hover:bg-surface";
+    "rounded-full border border-line bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-trust hover:text-trust-dark dark:hover:text-trust";
 
   return (
     <div className="flex flex-wrap gap-2">

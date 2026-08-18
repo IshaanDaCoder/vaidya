@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { BrandHeader } from "@/components/ui/BrandHeader";
+import { Alert } from "@/components/ui/Alert";
+import { heading, link, buttonVariants } from "@/components/ui/styles";
 import { chooseRole } from "./actions";
 
 export default async function ChooseRolePage({
@@ -30,55 +33,52 @@ export default async function ChooseRolePage({
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6 py-16">
-      <h1 className="text-2xl font-semibold text-foreground">One more thing</h1>
-      <p className="mt-2 text-sm text-muted">
-        How will you use Vaidya? This can&apos;t be changed later.
-      </p>
+    <main className="bg-noise flex min-h-screen flex-col justify-center px-6 py-16">
+      <div className="mx-auto w-full max-w-sm">
+        <BrandHeader />
 
-      {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </p>
-      )}
+        <div className="mt-8 rounded-2xl border border-line bg-surface p-7 shadow-sm">
+          <h1 className={heading("md")}>One more thing</h1>
+          <p className="mt-1.5 text-sm text-muted">
+            How will you use Vaidya? This can&apos;t be changed later.
+          </p>
 
-      <form className="mt-8 space-y-5">
-        <fieldset className="grid grid-cols-2 gap-3">
-          <legend className="sr-only">I am a...</legend>
-          <label className="flex cursor-pointer items-center justify-center rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
-            <input type="radio" name="role" value="patient" defaultChecked className="sr-only" />
-            Patient
-          </label>
-          <label className="flex cursor-pointer items-center justify-center rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
-            <input type="radio" name="role" value="doctor" className="sr-only" />
-            Doctor
-          </label>
-        </fieldset>
+          {error && (
+            <div className="mt-5">
+              <Alert tone="error">{error}</Alert>
+            </div>
+          )}
 
-        <label className="flex items-start gap-2 text-xs text-muted">
-          <input type="checkbox" name="consent" required className="mt-0.5" />
-          <span>
-            I agree to the{" "}
-            <Link
-              href="/terms"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-            >
-              Terms and Conditions
-            </Link>{" "}
-            and consent to Vaidya processing my personal data to provide this
-            service.
-          </span>
-        </label>
+          <form className="mt-6 space-y-4">
+            <fieldset className="grid grid-cols-2 gap-3">
+              <legend className="sr-only">I am a...</legend>
+              <label className="flex cursor-pointer items-center justify-center rounded-lg border border-line bg-background px-4 py-3 text-sm font-medium text-foreground transition-colors has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
+                <input type="radio" name="role" value="patient" defaultChecked className="sr-only" />
+                Patient
+              </label>
+              <label className="flex cursor-pointer items-center justify-center rounded-lg border border-line bg-background px-4 py-3 text-sm font-medium text-foreground transition-colors has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
+                <input type="radio" name="role" value="doctor" className="sr-only" />
+                Doctor
+              </label>
+            </fieldset>
 
-        <button
-          formAction={chooseRole}
-          className="w-full rounded-md bg-trust px-4 py-2.5 text-sm font-medium text-white hover:bg-trust-dark"
-        >
-          Continue
-        </button>
-      </form>
+            <label className="flex items-start gap-2.5 text-xs text-muted">
+              <input type="checkbox" name="consent" required className="mt-0.5 h-3.5 w-3.5 accent-trust" />
+              <span>
+                I agree to the{" "}
+                <Link href="/terms" target="_blank" rel="noreferrer" className={link}>
+                  Terms and Conditions
+                </Link>{" "}
+                and consent to Vaidya processing my personal data to provide this service.
+              </span>
+            </label>
+
+            <button formAction={chooseRole} className={`w-full ${buttonVariants("primary")}`}>
+              Continue
+            </button>
+          </form>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { BrandHeader } from "@/components/ui/BrandHeader";
+import { Alert } from "@/components/ui/Alert";
+import { heading, input, label, link, buttonVariants } from "@/components/ui/styles";
 import { signInWithGoogle, signInWithMicrosoft, signup } from "../actions";
 
 export default async function SignupPage({
@@ -11,127 +13,106 @@ export default async function SignupPage({
   const defaultRole = role === "doctor" ? "doctor" : "patient";
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6 py-16">
-      <div className="flex items-center justify-between">
-        <Link href="/" className="font-serif text-lg font-semibold text-trust-dark">
-          Vaidya
-        </Link>
-        <ThemeToggle />
-      </div>
-      <h1 className="mt-6 text-2xl font-semibold text-foreground">Create your account</h1>
-      <p className="mt-2 text-sm text-muted">
-        Choose how you&apos;ll use Vaidya. You can&apos;t change this after signing up.
-      </p>
+    <main className="bg-noise flex min-h-screen flex-col justify-center px-6 py-16">
+      <div className="mx-auto w-full max-w-sm">
+        <BrandHeader />
 
-      {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
+        <div className="mt-8 rounded-2xl border border-line bg-surface p-7 shadow-sm">
+          <h1 className={heading("md")}>Create your account</h1>
+          <p className="mt-1.5 text-sm text-muted">
+            Choose how you&apos;ll use Vaidya. You can&apos;t change this after signing up.
+          </p>
+
+          {error && (
+            <div className="mt-5">
+              <Alert tone="error">{error}</Alert>
+            </div>
+          )}
+
+          <form className="mt-6 space-y-4">
+            <fieldset className="grid grid-cols-2 gap-3">
+              <legend className="sr-only">I am a...</legend>
+              <label className="flex cursor-pointer items-center justify-center rounded-lg border border-line bg-background px-4 py-3 text-sm font-medium text-foreground transition-colors has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
+                <input
+                  type="radio"
+                  name="role"
+                  value="patient"
+                  defaultChecked={defaultRole === "patient"}
+                  className="sr-only"
+                />
+                Patient
+              </label>
+              <label className="flex cursor-pointer items-center justify-center rounded-lg border border-line bg-background px-4 py-3 text-sm font-medium text-foreground transition-colors has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
+                <input
+                  type="radio"
+                  name="role"
+                  value="doctor"
+                  defaultChecked={defaultRole === "doctor"}
+                  className="sr-only"
+                />
+                Doctor
+              </label>
+            </fieldset>
+
+            <div>
+              <label htmlFor="email" className={label}>
+                Email
+              </label>
+              <input id="email" name="email" type="email" required className={input} />
+            </div>
+            <div>
+              <label htmlFor="password" className={label}>
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                minLength={6}
+                className={input}
+              />
+            </div>
+
+            <label className="flex items-start gap-2.5 pt-1 text-xs text-muted">
+              <input type="checkbox" name="consent" required className="mt-0.5 h-3.5 w-3.5 accent-trust" />
+              <span>
+                I agree to the{" "}
+                <Link href="/terms" target="_blank" rel="noreferrer" className={link}>
+                  Terms and Conditions
+                </Link>{" "}
+                and consent to Vaidya processing my personal data to provide this service.
+              </span>
+            </label>
+
+            <button formAction={signup} className={`mt-1 w-full ${buttonVariants("primary")}`}>
+              Sign up
+            </button>
+          </form>
+
+          <div className="mt-6 flex flex-col gap-2">
+            <div className="flex items-center gap-3 text-xs text-muted">
+              <span className="h-px flex-1 bg-line" />
+              Or continue with
+              <span className="h-px flex-1 bg-line" />
+            </div>
+            <form>
+              <button formAction={signInWithGoogle} className={`w-full ${buttonVariants("secondary")}`}>
+                Google
+              </button>
+            </form>
+            <form>
+              <button formAction={signInWithMicrosoft} className={`w-full ${buttonVariants("secondary")}`}>
+                Microsoft
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <p className="mt-6 text-center text-sm text-muted">
+          Already have an account? <Link href="/login" className={link}>Log in</Link>
         </p>
-      )}
-
-      <form className="mt-8 space-y-5">
-        <fieldset className="grid grid-cols-2 gap-3">
-          <legend className="sr-only">I am a...</legend>
-          <label className="flex cursor-pointer items-center justify-center rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
-            <input
-              type="radio"
-              name="role"
-              value="patient"
-              defaultChecked={defaultRole === "patient"}
-              className="sr-only"
-            />
-            Patient
-          </label>
-          <label className="flex cursor-pointer items-center justify-center rounded-md border border-line px-4 py-3 text-sm font-medium text-foreground has-[:checked]:border-trust has-[:checked]:bg-trust/10 has-[:checked]:text-trust-dark dark:has-[:checked]:text-trust">
-            <input
-              type="radio"
-              name="role"
-              value="doctor"
-              defaultChecked={defaultRole === "doctor"}
-              className="sr-only"
-            />
-            Doctor
-          </label>
-        </fieldset>
-
-        <div>
-          <label htmlFor="email" className="text-xs text-muted">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="text-xs text-muted">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={6}
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
-
-        <label className="flex items-start gap-2 text-xs text-muted">
-          <input type="checkbox" name="consent" required className="mt-0.5" />
-          <span>
-            I agree to the{" "}
-            <Link
-              href="/terms"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-            >
-              Terms and Conditions
-            </Link>{" "}
-            and consent to Vaidya processing my personal data to provide this
-            service.
-          </span>
-        </label>
-
-        <button
-          formAction={signup}
-          className="w-full rounded-md bg-trust px-4 py-2.5 text-sm font-medium text-white hover:bg-trust-dark"
-        >
-          Sign up
-        </button>
-      </form>
-
-      <div className="mt-6 flex flex-col gap-2">
-        <div className="text-center text-xs text-muted">Or continue with</div>
-        <form>
-          <button
-            formAction={signInWithGoogle}
-            className="w-full rounded-md border border-line px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface"
-          >
-            Google
-          </button>
-        </form>
-        <form>
-          <button
-            formAction={signInWithMicrosoft}
-            className="w-full rounded-md border border-line px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface"
-          >
-            Microsoft
-          </button>
-        </form>
       </div>
-
-      <p className="mt-6 text-center text-sm text-muted">
-        Already have an account?{" "}
-        <Link href="/login" className="font-medium text-trust-dark underline underline-offset-4 dark:text-trust">
-          Log in
-        </Link>
-      </p>
-
     </main>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AddToCalendarLinks } from "@/components/AddToCalendarLinks";
+import { buttonVariants, link as linkClass } from "@/components/ui/styles";
 
 export function BookSlotButton({
   doctorId,
@@ -59,12 +60,12 @@ export function BookSlotButton({
   if (state === "booked" && consultationId) {
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     return (
-      <div className="w-full rounded-md border border-trust/30 bg-trust/10 p-3">
+      <div className="w-full rounded-xl border border-trust/25 bg-trust/10 p-4">
         <p className="text-xs font-medium text-trust-dark dark:text-trust">
           Booked with {doctorName}.
         </p>
         <p className="mt-2 text-xs text-muted">Add to your calendar:</p>
-        <div className="mt-1.5">
+        <div className="mt-2">
           <AddToCalendarLinks
             consultationId={consultationId}
             event={{
@@ -76,10 +77,7 @@ export function BookSlotButton({
             }}
           />
         </div>
-        <Link
-          href={`/consultation/${consultationId}`}
-          className="mt-3 inline-block text-xs font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-        >
+        <Link href={`/consultation/${consultationId}`} className={`mt-3 inline-block text-xs ${linkClass}`}>
           Go to consultation
         </Link>
       </div>
@@ -90,10 +88,7 @@ export function BookSlotButton({
     return (
       <div className="text-right">
         <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
-        <button
-          onClick={book}
-          className="text-xs font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-        >
+        <button onClick={book} className={`text-xs ${linkClass}`}>
           Try again
         </button>
       </div>
@@ -101,11 +96,7 @@ export function BookSlotButton({
   }
 
   return (
-    <button
-      onClick={book}
-      disabled={state === "booking"}
-      className="rounded-md bg-trust px-3 py-1.5 text-xs font-medium text-white hover:bg-trust-dark disabled:opacity-60"
-    >
+    <button onClick={book} disabled={state === "booking"} className={buttonVariants("primary", "sm")}>
       {state === "booking" ? "Booking…" : "Book"}
     </button>
   );

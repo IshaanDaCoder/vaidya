@@ -2,25 +2,32 @@ import Link from "next/link";
 import { requireRole } from "@/utils/require-role";
 import { createClient } from "@/utils/supabase/server";
 import { logout } from "@/app/(auth)/actions";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { isAdminEmail } from "@/utils/is-admin";
 import { markConsultationCompleted } from "@/app/consultation/[id]/actions";
 import { DeleteAccountSection } from "@/components/DeleteAccountSection";
+import { AppHeader } from "@/components/ui/AppHeader";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Alert } from "@/components/ui/Alert";
+import { Badge } from "@/components/ui/Badge";
+import { buttonVariants, link, listRow } from "@/components/ui/styles";
 
-const statusCopy: Record<string, { label: string; tone: string; note: string }> = {
+const statusCopy: Record<
+  string,
+  { label: string; tone: "success" | "warning" | "error"; note: string }
+> = {
   pending: {
     label: "Pending review",
-    tone: "border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-800/50 dark:bg-amber-950/30 dark:text-amber-300",
+    tone: "warning",
     note: "An admin is reviewing your license details. You'll be listed to patients once approved.",
   },
   verified: {
     label: "Verified",
-    tone: "border-trust/30 bg-trust/10 text-trust-dark dark:text-trust",
+    tone: "success",
     note: "You're verified. You'll also need an active subscription (Day 7) to appear in patient search.",
   },
   rejected: {
     label: "Rejected",
-    tone: "border-red-300 bg-red-50 text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300",
+    tone: "error",
     note: "Your submission wasn't approved. Update your details below and resubmit.",
   },
 };
@@ -74,71 +81,58 @@ export default async function DoctorDashboardPage({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">Doctor dashboard</h1>
-        <div className="flex items-center gap-4">
-          {isAdminEmail(user.email) && (
-            <Link
-              href="/admin/doctors"
-              className="text-sm font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-            >
+      <AppHeader
+        title="Doctor dashboard"
+        description={`Signed in as ${user.email}`}
+        actions={
+          isAdminEmail(user.email) ? (
+            <Link href="/admin/doctors" className={`text-sm ${link}`}>
               Admin
             </Link>
-          )}
-          <ThemeToggle />
-        </div>
-      </div>
-      <p className="mt-2 text-sm text-muted">Signed in as {user.email}</p>
+          ) : undefined
+        }
+      />
 
       {error && (
-        <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </p>
+        <div className="mt-6">
+          <Alert tone="error">{error}</Alert>
+        </div>
       )}
 
       {!profile ? (
-        <div className="mt-6 rounded-md border border-line bg-surface px-4 py-4">
+        <div className="mt-6 rounded-2xl border border-line bg-surface p-5 shadow-sm">
           <p className="text-sm text-foreground/85">
             You haven&apos;t submitted your profile for verification yet.
           </p>
-          <Link
-            href="/doctor/onboarding"
-            className="mt-3 inline-block rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-          >
+          <Link href="/doctor/onboarding" className={`mt-3 inline-flex ${buttonVariants("primary", "sm")}`}>
             Complete your profile
           </Link>
         </div>
       ) : (
-        <div className={`mt-6 rounded-md border px-4 py-4 ${statusCopy[profile.verification_status].tone}`}>
-          <p className="text-sm font-medium capitalize">
-            {statusCopy[profile.verification_status].label}
-          </p>
-          <p className="mt-1 text-sm">{statusCopy[profile.verification_status].note}</p>
-          <Link
-            href="/doctor/onboarding"
-            className="mt-3 inline-block text-sm font-medium underline underline-offset-4"
-          >
-            {profile.verification_status === "rejected" ? "Update and resubmit" : "Edit profile"}
-          </Link>
+        <div className="mt-6">
+          <Alert tone={statusCopy[profile.verification_status].tone}>
+            <Badge tone={statusCopy[profile.verification_status].tone}>
+              {statusCopy[profile.verification_status].label}
+            </Badge>
+            <p className="mt-2">{statusCopy[profile.verification_status].note}</p>
+            <Link href="/doctor/onboarding" className="mt-2 inline-block text-sm font-medium underline underline-offset-4">
+              {profile.verification_status === "rejected" ? "Update and resubmit" : "Edit profile"}
+            </Link>
+          </Alert>
         </div>
       )}
 
-      <Link
-        href="/doctor/availability"
-        className="mt-6 inline-block rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:bg-surface"
-      >
+      <Link href="/doctor/availability" className={`mt-6 inline-flex ${buttonVariants("secondary")}`}>
         Manage availability
       </Link>
 
       <section className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Upcoming consultations ({upcoming.length})
-        </h2>
-        <div className="mt-3 space-y-2">
+        <SectionHeading>Upcoming consultations ({upcoming.length})</SectionHeading>
+        <div className="mt-4 space-y-2.5">
           {upcoming.length === 0 && <p className="text-sm text-muted">Nothing scheduled yet.</p>}
           {upcoming.map((c) => (
-            <div key={c.id} className="rounded-md border border-line px-4 py-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
+            <div key={c.id} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-sm font-medium text-foreground">
                     {nameById.get(c.patient_id) || "Patient"}
@@ -149,18 +143,12 @@ export default async function DoctorDashboardPage({
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Link
-                    href={`/consultation/${c.id}`}
-                    className="rounded-md bg-trust px-3 py-1.5 text-xs font-medium text-white hover:bg-trust-dark"
-                  >
+                  <Link href={`/consultation/${c.id}`} className={buttonVariants("primary", "sm")}>
                     Join call
                   </Link>
                   <form>
                     <input type="hidden" name="consultationId" value={c.id} />
-                    <button
-                      formAction={markConsultationCompleted}
-                      className="text-xs font-medium text-muted underline underline-offset-4 hover:text-foreground"
-                    >
+                    <button formAction={markConsultationCompleted} className={`text-xs ${link}`}>
                       Mark completed
                     </button>
                   </form>
@@ -173,14 +161,11 @@ export default async function DoctorDashboardPage({
 
       {past.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Past</h2>
-          <div className="mt-3 space-y-2">
+          <SectionHeading>Past</SectionHeading>
+          <div className="mt-4 space-y-2">
             {past.map((c) => (
-              <div
-                key={c.id}
-                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line px-4 py-3 text-sm"
-              >
-                <span className="text-foreground">{nameById.get(c.patient_id) || "Patient"}</span>
+              <div key={c.id} className={listRow}>
+                <span className="text-sm text-foreground">{nameById.get(c.patient_id) || "Patient"}</span>
                 <span className="text-xs capitalize text-muted">{c.status}</span>
               </div>
             ))}
@@ -188,11 +173,8 @@ export default async function DoctorDashboardPage({
         </section>
       )}
 
-      <form className="mt-10">
-        <button
-          formAction={logout}
-          className="rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:bg-surface"
-        >
+      <form className="mt-12">
+        <button formAction={logout} className={buttonVariants("secondary")}>
           Log out
         </button>
       </form>

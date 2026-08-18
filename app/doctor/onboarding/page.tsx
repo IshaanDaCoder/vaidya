@@ -1,6 +1,10 @@
 import { requireRole } from "@/utils/require-role";
 import { createClient } from "@/utils/supabase/server";
 import { submitDoctorProfile } from "./actions";
+import { BrandHeader } from "@/components/ui/BrandHeader";
+import { Alert } from "@/components/ui/Alert";
+import { Badge } from "@/components/ui/Badge";
+import { heading, input, label, buttonVariants } from "@/components/ui/styles";
 
 export default async function DoctorOnboardingPage({
   searchParams,
@@ -19,136 +23,123 @@ export default async function DoctorOnboardingPage({
 
   return (
     <main className="mx-auto max-w-lg px-6 py-16">
-      <h1 className="text-2xl font-semibold text-foreground">
-        {existing ? "Update your profile" : "Complete your doctor profile"}
-      </h1>
-      <p className="mt-2 text-sm text-muted">
-        This information is reviewed before your profile becomes visible to
-        patients. You can&apos;t approve your own verification — an admin
-        reviews every submission.
-      </p>
+      <BrandHeader href="/doctor/dashboard" />
 
-      {existing && (
-        <p className="mt-4 inline-block rounded-full border border-line px-3 py-1 text-xs font-medium capitalize text-foreground">
-          Status: {existing.verification_status}
+      <div className="mt-8 rounded-2xl border border-line bg-surface p-7 shadow-sm">
+        <h1 className={heading("md")}>
+          {existing ? "Update your profile" : "Complete your doctor profile"}
+        </h1>
+        <p className="mt-2 text-sm text-muted">
+          This information is reviewed before your profile becomes visible to
+          patients. You can&apos;t approve your own verification — an admin
+          reviews every submission.
         </p>
-      )}
 
-      {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </p>
-      )}
+        {existing && (
+          <div className="mt-4">
+            <Badge tone="neutral">Status: {existing.verification_status}</Badge>
+          </div>
+        )}
 
-      <form className="mt-8 space-y-5">
-        <div>
-          <label htmlFor="specialization" className="text-xs text-muted">
-            Specialization
-          </label>
-          <input
-            id="specialization"
-            name="specialization"
-            required
-            defaultValue={existing?.specialization ?? ""}
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
+        {error && (
+          <div className="mt-5">
+            <Alert tone="error">{error}</Alert>
+          </div>
+        )}
 
-        <div>
-          <label htmlFor="qualifications" className="text-xs text-muted">
-            Qualifications
-          </label>
-          <input
-            id="qualifications"
-            name="qualifications"
-            required
-            placeholder="MBBS, MD (General Medicine)"
-            defaultValue={existing?.qualifications ?? ""}
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
+        <form className="mt-6 space-y-4">
+          <div>
+            <label htmlFor="specialization" className={label}>
+              Specialization
+            </label>
+            <input
+              id="specialization"
+              name="specialization"
+              required
+              defaultValue={existing?.specialization ?? ""}
+              className={input}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="licenseNumber" className="text-xs text-muted">
-            Medical registration / license number
-          </label>
-          <input
-            id="licenseNumber"
-            name="licenseNumber"
-            required
-            defaultValue={existing?.license_number ?? ""}
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
+          <div>
+            <label htmlFor="qualifications" className={label}>
+              Qualifications
+            </label>
+            <input
+              id="qualifications"
+              name="qualifications"
+              required
+              placeholder="MBBS, MD (General Medicine)"
+              defaultValue={existing?.qualifications ?? ""}
+              className={input}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="licenseDocument" className="text-xs text-muted">
-            Upload license / registration certificate
-            {existing?.license_document_path && (
-              <span className="ml-1 text-trust-dark dark:text-trust">(already on file — optional to replace)</span>
-            )}
-          </label>
-          <input
-            id="licenseDocument"
-            name="licenseDocument"
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg"
-            required={!existing?.license_document_path}
-            className="mt-1 w-full text-sm text-foreground"
-          />
-        </div>
+          <div>
+            <label htmlFor="licenseNumber" className={label}>
+              Medical registration / license number
+            </label>
+            <input
+              id="licenseNumber"
+              name="licenseNumber"
+              required
+              defaultValue={existing?.license_number ?? ""}
+              className={input}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="city" className="text-xs text-muted">
-            City
-          </label>
-          <input
-            id="city"
-            name="city"
-            required
-            defaultValue={existing?.city ?? ""}
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
+          <div>
+            <label htmlFor="licenseDocument" className={label}>
+              Upload license / registration certificate
+              {existing?.license_document_path && (
+                <span className="ml-1 text-trust-dark dark:text-trust">(already on file — optional to replace)</span>
+              )}
+            </label>
+            <input
+              id="licenseDocument"
+              name="licenseDocument"
+              type="file"
+              accept=".pdf,.png,.jpg,.jpeg"
+              required={!existing?.license_document_path}
+              className="mt-1.5 w-full text-sm text-foreground file:mr-3 file:rounded-full file:border-0 file:bg-trust/10 file:px-3.5 file:py-1.5 file:text-xs file:font-medium file:text-trust-dark dark:file:text-trust"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="consultationFeeRupees" className="text-xs text-muted">
-            Consultation fee (₹, from your second consultation with a patient onward)
-          </label>
-          <input
-            id="consultationFeeRupees"
-            name="consultationFeeRupees"
-            type="number"
-            min="1"
-            step="1"
-            required
-            defaultValue={
-              existing ? Math.round(existing.consultation_fee_cents / 100) : ""
-            }
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
+          <div>
+            <label htmlFor="city" className={label}>
+              City
+            </label>
+            <input id="city" name="city" required defaultValue={existing?.city ?? ""} className={input} />
+          </div>
 
-        <div>
-          <label htmlFor="bio" className="text-xs text-muted">
-            Bio (shown on your public profile)
-          </label>
-          <textarea
-            id="bio"
-            name="bio"
-            rows={4}
-            defaultValue={existing?.bio ?? ""}
-            className="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-          />
-        </div>
+          <div>
+            <label htmlFor="consultationFeeRupees" className={label}>
+              Consultation fee (₹, from your second consultation with a patient onward)
+            </label>
+            <input
+              id="consultationFeeRupees"
+              name="consultationFeeRupees"
+              type="number"
+              min="1"
+              step="1"
+              required
+              defaultValue={existing ? Math.round(existing.consultation_fee_cents / 100) : ""}
+              className={input}
+            />
+          </div>
 
-        <button
-          formAction={submitDoctorProfile}
-          className="w-full rounded-md bg-trust px-4 py-2.5 text-sm font-medium text-white hover:bg-trust-dark"
-        >
-          {existing ? "Save changes" : "Submit for verification"}
-        </button>
-      </form>
+          <div>
+            <label htmlFor="bio" className={label}>
+              Bio (shown on your public profile)
+            </label>
+            <textarea id="bio" name="bio" rows={4} defaultValue={existing?.bio ?? ""} className={input} />
+          </div>
+
+          <button formAction={submitDoctorProfile} className={`w-full ${buttonVariants("primary")}`}>
+            {existing ? "Save changes" : "Submit for verification"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

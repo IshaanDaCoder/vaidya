@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { requireRole } from "@/utils/require-role";
 import { createClient } from "@/utils/supabase/server";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   addAvailabilitySlot,
   generateSlotsFromHours,
   removeAvailabilitySlot,
   saveWeeklyHours,
 } from "./actions";
+import { AppHeader } from "@/components/ui/AppHeader";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Alert } from "@/components/ui/Alert";
+import { card, input, label, buttonVariants } from "@/components/ui/styles";
 
 const DAY_LABELS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -51,18 +54,12 @@ export default async function AvailabilityPage({
   if (!doctorProfile) {
     return (
       <main className="mx-auto max-w-2xl px-6 py-16">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-foreground">Availability</h1>
-          <ThemeToggle />
-        </div>
-        <div className="mt-6 rounded-md border border-line bg-surface px-4 py-4">
+        <AppHeader title="Availability" />
+        <div className="mt-6 rounded-2xl border border-line bg-surface p-5 shadow-sm">
           <p className="text-sm text-foreground/85">
             Complete your doctor profile before setting your availability.
           </p>
-          <Link
-            href="/doctor/onboarding"
-            className="mt-3 inline-block rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-          >
+          <Link href="/doctor/onboarding" className={`mt-3 inline-flex ${buttonVariants("primary", "sm")}`}>
             Complete your profile
           </Link>
         </div>
@@ -87,53 +84,45 @@ export default async function AvailabilityPage({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">Availability</h1>
-        <ThemeToggle />
-      </div>
-      <p className="mt-2 text-sm text-muted">
-        Set your recurring hours of operation, generate bookable slots from them, or add
-        one-off slots by hand.
-      </p>
-      <Link
-        href="/doctor/dashboard"
-        className="mt-2 inline-block text-sm text-trust-dark underline underline-offset-4 dark:text-trust"
-      >
-        Back to dashboard
-      </Link>
+      <AppHeader
+        title="Availability"
+        description="Set your recurring hours of operation, generate bookable slots from them, or add one-off slots by hand."
+        backHref="/doctor/dashboard"
+        backLabel="Back to dashboard"
+      />
 
       {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </p>
+        <div className="mt-6">
+          <Alert tone="error">{error}</Alert>
+        </div>
       )}
       {savedHours && (
-        <p className="mt-6 rounded-md border border-trust/30 bg-trust/10 px-4 py-3 text-sm text-trust-dark dark:text-trust">
-          Hours of operation saved.
-        </p>
+        <div className="mt-6">
+          <Alert tone="success">Hours of operation saved.</Alert>
+        </div>
       )}
       {generated !== undefined && (
-        <p className="mt-6 rounded-md border border-trust/30 bg-trust/10 px-4 py-3 text-sm text-trust-dark dark:text-trust">
-          {generated === "0"
-            ? "No new slots to generate — everything in the next 3 weeks already exists."
-            : `Generated ${generated} new slot${generated === "1" ? "" : "s"} for the next 3 weeks.`}
-        </p>
+        <div className="mt-6">
+          <Alert tone="success">
+            {generated === "0"
+              ? "No new slots to generate — everything in the next 3 weeks already exists."
+              : `Generated ${generated} new slot${generated === "1" ? "" : "s"} for the next 3 weeks.`}
+          </Alert>
+        </div>
       )}
 
       {/* Hours of operation */}
       <section className="mt-8">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Hours of operation
-        </h2>
-        <p className="mt-1 text-sm text-muted">
+        <SectionHeading>Hours of operation</SectionHeading>
+        <p className="mt-2 text-sm text-muted">
           Turn on the days you work, set your hours, and pick a consultation length. Times
           are in IST.
         </p>
 
-        <form className="mt-4 space-y-4">
+        <form className={`mt-4 space-y-4 ${card}`}>
           <div className="flex items-end gap-3">
             <div>
-              <label htmlFor="slotDurationMinutes" className="text-xs text-muted">
+              <label htmlFor="slotDurationMinutes" className={label}>
                 Consultation length (minutes)
               </label>
               <input
@@ -145,62 +134,56 @@ export default async function AvailabilityPage({
                 step="5"
                 defaultValue={sharedDuration}
                 required
-                className="mt-1 w-32 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+                className={`${input} w-32`}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            {DAY_LABELS.map((label, i) => {
+            {DAY_LABELS.map((dayLabel, i) => {
               const existing = hoursByDay.get(i);
               return (
                 <div
                   key={i}
-                  className="flex flex-wrap items-center gap-3 rounded-md border border-line px-4 py-3"
+                  className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-background px-4 py-3 transition-colors has-[:checked]:border-trust/40 has-[:checked]:bg-trust/5"
                 >
                   <label className="flex w-28 shrink-0 items-center gap-2 text-sm text-foreground">
                     <input
                       type="checkbox"
                       name={`active_${i}`}
                       defaultChecked={existing?.is_active ?? false}
-                      className="h-4 w-4"
+                      className="h-4 w-4 accent-trust"
                     />
-                    {label}
+                    {dayLabel}
                   </label>
                   <input
                     type="time"
                     name={`start_${i}`}
                     defaultValue={existing?.start_time?.slice(0, 5) ?? "09:00"}
-                    className="rounded-md border border-line bg-surface px-2 py-1.5 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+                    className={`${input} mt-0 w-auto`}
                   />
                   <span className="text-sm text-muted">to</span>
                   <input
                     type="time"
                     name={`end_${i}`}
                     defaultValue={existing?.end_time?.slice(0, 5) ?? "17:00"}
-                    className="rounded-md border border-line bg-surface px-2 py-1.5 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+                    className={`${input} mt-0 w-auto`}
                   />
                 </div>
               );
             })}
           </div>
 
-          <button
-            formAction={saveWeeklyHours}
-            className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-          >
+          <button formAction={saveWeeklyHours} className={buttonVariants("primary")}>
             Save hours
           </button>
         </form>
 
         <form className="mt-3">
-          <button
-            formAction={generateSlotsFromHours}
-            className="rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:bg-surface"
-          >
+          <button formAction={generateSlotsFromHours} className={buttonVariants("secondary")}>
             Generate slots for the next 3 weeks
           </button>
-          <p className="mt-1 text-xs text-muted">
+          <p className="mt-1.5 text-xs text-muted">
             Fills in bookable slots from your saved hours. Safe to click again later —
             it only adds what&apos;s missing, never duplicates.
           </p>
@@ -209,38 +192,21 @@ export default async function AvailabilityPage({
 
       {/* One-off slot */}
       <section className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Add a one-off slot
-        </h2>
-        <form className="mt-4 flex flex-wrap items-end gap-3">
+        <SectionHeading>Add a one-off slot</SectionHeading>
+        <form className={`mt-4 flex flex-wrap items-end gap-3 ${card}`}>
           <div>
-            <label htmlFor="startTime" className="text-xs text-muted">
+            <label htmlFor="startTime" className={label}>
               Start
             </label>
-            <input
-              id="startTime"
-              name="startTime"
-              type="datetime-local"
-              required
-              className="mt-1 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-            />
+            <input id="startTime" name="startTime" type="datetime-local" required className={input} />
           </div>
           <div>
-            <label htmlFor="endTime" className="text-xs text-muted">
+            <label htmlFor="endTime" className={label}>
               End
             </label>
-            <input
-              id="endTime"
-              name="endTime"
-              type="datetime-local"
-              required
-              className="mt-1 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-            />
+            <input id="endTime" name="endTime" type="datetime-local" required className={input} />
           </div>
-          <button
-            formAction={addAvailabilitySlot}
-            className="rounded-md bg-trust px-4 py-2.5 text-sm font-medium text-white hover:bg-trust-dark"
-          >
+          <button formAction={addAvailabilitySlot} className={buttonVariants("primary")}>
             Add slot
           </button>
         </form>
@@ -248,17 +214,13 @@ export default async function AvailabilityPage({
 
       {/* Upcoming slots */}
       <section className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Upcoming slots ({(slots ?? []).length})
-        </h2>
-        <div className="mt-3 space-y-2">
-          {(slots ?? []).length === 0 && (
-            <p className="text-sm text-muted">No upcoming slots yet.</p>
-          )}
+        <SectionHeading>Upcoming slots ({(slots ?? []).length})</SectionHeading>
+        <div className="mt-4 space-y-2">
+          {(slots ?? []).length === 0 && <p className="text-sm text-muted">No upcoming slots yet.</p>}
           {(slots ?? []).map((s) => (
             <div
               key={s.id}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line px-4 py-3 text-sm"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-surface px-4 py-3.5 text-sm shadow-sm"
             >
               <span className="text-foreground">{formatSlot(s.start_time, s.end_time)}</span>
               {s.is_booked ? (

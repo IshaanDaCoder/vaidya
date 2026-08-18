@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { getConsultationRoomName } from "@/utils/video";
 import { JitsiRoom } from "@/components/JitsiRoom";
+import { Logo } from "@/components/ui/Logo";
+import { badgeVariants } from "@/components/ui/styles";
 
 export default async function ConsultationRoomPage({
   params,
@@ -65,18 +67,21 @@ export default async function ConsultationRoomPage({
 
   return (
     <main className="flex h-screen flex-col bg-background">
-      <div className="flex items-center justify-between border-b border-line px-6 py-3">
-        <div>
-          <p className="text-sm font-medium text-foreground">
-            Consultation with{" "}
-            {otherParty?.full_name ||
-              (otherParty?.role === "doctor" ? "your doctor" : "your patient")}
-          </p>
-          <p className="text-xs text-muted capitalize">{consultation.status}</p>
+      <div className="flex items-center justify-between border-b border-line bg-surface px-6 py-3 shadow-sm">
+        <div className="flex items-center gap-3">
+          <Logo size={26} />
+          <div>
+            <p className="text-sm font-medium text-foreground">
+              Consultation with{" "}
+              {otherParty?.full_name ||
+                (otherParty?.role === "doctor" ? "your doctor" : "your patient")}
+            </p>
+            <span className={badgeVariants("success")}>{consultation.status}</span>
+          </div>
         </div>
         <Link
           href={backHref}
-          className="text-sm text-trust-dark underline underline-offset-4 dark:text-trust"
+          className="rounded-full border border-line px-4 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-trust hover:text-trust-dark dark:hover:text-trust"
         >
           Leave
         </Link>
@@ -87,7 +92,7 @@ export default async function ConsultationRoomPage({
           <summary className="cursor-pointer text-sm font-medium text-foreground">
             Patient medical history
           </summary>
-          <div className="mt-3 grid max-w-2xl grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+          <div className="mt-3 grid max-w-2xl grid-cols-1 gap-3 rounded-xl border border-line bg-background p-4 text-sm sm:grid-cols-2">
             {patientProfile?.gender && (
               <div>
                 <span className="text-xs text-muted">Gender</span>

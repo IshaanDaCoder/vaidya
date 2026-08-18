@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Logo } from "@/components/ui/Logo";
 
 const steps = [
   {
@@ -60,8 +61,11 @@ export default function Home() {
     <>
       <header className="sticky top-0 z-20 border-b border-line bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="font-serif text-xl font-semibold text-trust-dark dark:text-trust">
-            Vaidya
+          <Link href="/" className="flex items-center gap-2.5">
+            <Logo size={32} />
+            <span className="font-serif text-xl font-semibold text-trust-dark dark:text-trust">
+              Vaidya
+            </span>
           </Link>
           <nav className="flex items-center gap-6 text-sm text-muted">
             <Link href="/terms" className="hover:text-foreground">
@@ -85,7 +89,8 @@ export default function Home() {
         {/* Hero */}
         <section className="bg-noise relative overflow-hidden border-b border-line">
           <div className="mx-auto max-w-3xl px-6 py-28 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-trust-dark dark:text-trust">
+            <Logo size={52} className="mx-auto drop-shadow-[0_8px_20px_rgba(138,67,15,0.28)]" />
+            <span className="mt-7 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-trust-dark dark:text-trust">
               Now connecting patients &amp; doctors across India
             </span>
             <h1 className="mt-8 font-serif text-4xl leading-[1.12] font-semibold tracking-tight text-balance text-foreground sm:text-5xl">
@@ -191,7 +196,10 @@ export default function Home() {
 
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs text-muted sm:flex-row">
-          <span className="font-serif text-sm text-foreground">Vaidya</span>
+          <span className="flex items-center gap-2">
+            <Logo size={20} />
+            <span className="font-serif text-sm text-foreground">Vaidya</span>
+          </span>
           <span>© {new Date().getFullYear()} Vaidya. All rights reserved.</span>
           <Link href="/terms" className="hover:text-foreground">
             Terms and Conditions

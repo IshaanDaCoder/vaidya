@@ -2,11 +2,14 @@ import Link from "next/link";
 import { requireRole } from "@/utils/require-role";
 import { createClient } from "@/utils/supabase/server";
 import { logout } from "@/app/(auth)/actions";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { isAdminEmail } from "@/utils/is-admin";
 import { submitReview } from "./actions";
 import { DeleteAccountSection } from "@/components/DeleteAccountSection";
 import { AddToCalendarLinks } from "@/components/AddToCalendarLinks";
+import { AppHeader } from "@/components/ui/AppHeader";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Alert } from "@/components/ui/Alert";
+import { input, label, link, buttonVariants, cardInteractive, listRow } from "@/components/ui/styles";
 
 function formatFee(cents: number) {
   return `₹${Math.round(cents / 100)}`;
@@ -85,47 +88,40 @@ export default async function SearchPage({
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">Find a doctor</h1>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/account/medical-history"
-            className="text-sm font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-          >
-            Medical history
-          </Link>
-          {isAdminEmail(user.email) && (
-            <Link
-              href="/admin/doctors"
-              className="text-sm font-medium text-trust-dark underline underline-offset-4 dark:text-trust"
-            >
-              Admin
+      <AppHeader
+        title="Find a doctor"
+        description={`Signed in as ${user.email}`}
+        actions={
+          <>
+            <Link href="/account/medical-history" className={`text-sm ${link}`}>
+              Medical history
             </Link>
-          )}
-          <ThemeToggle />
-        </div>
-      </div>
-      <p className="mt-2 text-sm text-muted">Signed in as {user.email}</p>
+            {isAdminEmail(user.email) && (
+              <Link href="/admin/doctors" className={`text-sm ${link}`}>
+                Admin
+              </Link>
+            )}
+          </>
+        }
+      />
 
       {error && (
-        <p className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </p>
+        <div className="mt-6">
+          <Alert tone="error">{error}</Alert>
+        </div>
       )}
 
       {(upcoming.length > 0 || past.length > 0) && (
-        <section className="mt-8">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-            My consultations
-          </h2>
-          <div className="mt-3 space-y-3">
+        <section className="mt-10">
+          <SectionHeading>My consultations</SectionHeading>
+          <div className="mt-4 space-y-3">
             {upcoming.map((c) => {
               const doctorName = doctorNameById.get(c.doctor_id) || "Doctor";
               const start = slotStartById.get(c.slot_id ?? "");
               const end = slotEndById.get(c.slot_id ?? "");
               return (
-                <div key={c.id} className="rounded-md border border-line px-4 py-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
+                <div key={c.id} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-foreground">{doctorName}</p>
                       <p className="text-xs text-muted">
@@ -133,15 +129,12 @@ export default async function SearchPage({
                         {c.is_free ? "Free consultation" : `₹${Math.round(c.fee_cents / 100)}`}
                       </p>
                     </div>
-                    <Link
-                      href={`/consultation/${c.id}`}
-                      className="rounded-md bg-trust px-3 py-1.5 text-xs font-medium text-white hover:bg-trust-dark"
-                    >
+                    <Link href={`/consultation/${c.id}`} className={buttonVariants("primary", "sm")}>
                       Join call
                     </Link>
                   </div>
                   {start && end && (
-                    <div className="mt-3">
+                    <div className="mt-3 border-t border-line pt-3">
                       <AddToCalendarLinks
                         consultationId={c.id}
                         event={{
@@ -159,7 +152,7 @@ export default async function SearchPage({
             })}
             {past.map((c) =>
               c.status === "completed" && !reviewedConsultIds.has(c.id) ? (
-                <div key={c.id} className="rounded-md border border-line px-4 py-3">
+                <div key={c.id} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
                   <p className="text-sm font-medium text-foreground">
                     {doctorNameById.get(c.doctor_id) || "Doctor"}
                   </p>
@@ -167,12 +160,8 @@ export default async function SearchPage({
                   <form className="mt-3 flex flex-wrap items-end gap-3">
                     <input type="hidden" name="consultationId" value={c.id} />
                     <div>
-                      <label className="text-xs text-muted">Rating</label>
-                      <select
-                        name="rating"
-                        required
-                        className="mt-1 block rounded-md border border-line bg-surface px-2 py-1.5 text-sm text-foreground"
-                      >
+                      <label className={label}>Rating</label>
+                      <select name="rating" required className={`${input} w-auto`}>
                         {[5, 4, 3, 2, 1].map((n) => (
                           <option key={n} value={n}>
                             {n} star{n === 1 ? "" : "s"}
@@ -184,22 +173,16 @@ export default async function SearchPage({
                       type="text"
                       name="comment"
                       placeholder="Optional comment"
-                      className="min-w-[200px] flex-1 rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
+                      className={`${input} min-w-[200px] flex-1`}
                     />
-                    <button
-                      formAction={submitReview}
-                      className="rounded-md bg-trust px-3 py-1.5 text-xs font-medium text-white hover:bg-trust-dark"
-                    >
+                    <button formAction={submitReview} className={buttonVariants("primary", "sm")}>
                       Submit review
                     </button>
                   </form>
                 </div>
               ) : (
-                <div
-                  key={c.id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line px-4 py-3 text-sm"
-                >
-                  <span className="text-foreground">{doctorNameById.get(c.doctor_id) || "Doctor"}</span>
+                <div key={c.id} className={listRow}>
+                  <span className="text-sm text-foreground">{doctorNameById.get(c.doctor_id) || "Doctor"}</span>
                   <span className="text-xs capitalize text-muted">
                     {c.status === "completed" ? "Reviewed" : c.status}
                   </span>
@@ -210,63 +193,55 @@ export default async function SearchPage({
         </section>
       )}
 
-      <h2 className="mt-10 text-sm font-semibold uppercase tracking-wide text-muted">
-        Search doctors
-      </h2>
-      <form className="mt-3 flex flex-wrap gap-3">
-        <input
-          type="text"
-          name="specialty"
-          placeholder="Specialty (e.g. Cardiology)"
-          defaultValue={specialty ?? ""}
-          className="min-w-[200px] flex-1 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          defaultValue={city ?? ""}
-          className="min-w-[160px] flex-1 rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-trust focus:ring-1 focus:ring-trust"
-        />
-        <button
-          type="submit"
-          className="rounded-md bg-trust px-4 py-2 text-sm font-medium text-white hover:bg-trust-dark"
-        >
-          Search
-        </button>
-      </form>
+      <section className="mt-12">
+        <SectionHeading>Search doctors</SectionHeading>
+        <form className="mt-4 flex flex-wrap gap-3">
+          <input
+            type="text"
+            name="specialty"
+            placeholder="Specialty (e.g. Cardiology)"
+            defaultValue={specialty ?? ""}
+            className={`${input} min-w-[200px] flex-1`}
+          />
+          <input
+            type="text"
+            name="city"
+            placeholder="City"
+            defaultValue={city ?? ""}
+            className={`${input} min-w-[160px] flex-1`}
+          />
+          <button type="submit" className={`${buttonVariants("primary")} self-start`}>
+            Search
+          </button>
+        </form>
 
-      <div className="mt-6 space-y-3">
-        {(doctorProfiles ?? []).length === 0 && (
-          <p className="text-sm text-muted">
-            No doctors match yet — try a different specialty or city, or check back soon.
-          </p>
-        )}
-        {(doctorProfiles ?? []).map((d) => (
-          <Link
-            key={d.user_id}
-            href={`/doctor/${d.user_id}`}
-            className="block rounded-lg border border-line bg-surface p-5 transition-colors hover:border-trust"
-          >
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <p className="font-medium text-foreground">
-                {nameById.get(d.user_id) || "Dr. " + d.specialization}
-              </p>
-              <p className="text-sm text-muted">{formatFee(d.consultation_fee_cents)} / consult</p>
-            </div>
-            <p className="mt-1 text-sm text-muted">
-              {d.specialization} · {d.qualifications} · {d.city}
+        <div className="mt-6 space-y-3">
+          {(doctorProfiles ?? []).length === 0 && (
+            <p className="text-sm text-muted">
+              No doctors match yet — try a different specialty or city, or check back soon.
             </p>
-            {d.bio && <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{d.bio}</p>}
-          </Link>
-        ))}
-      </div>
+          )}
+          {(doctorProfiles ?? []).map((d) => (
+            <Link key={d.user_id} href={`/doctor/${d.user_id}`} className={`block ${cardInteractive}`}>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <p className="font-medium text-foreground">
+                  {nameById.get(d.user_id) || "Dr. " + d.specialization}
+                </p>
+                <p className="text-sm font-medium text-trust-dark dark:text-trust">
+                  {formatFee(d.consultation_fee_cents)} / consult
+                </p>
+              </div>
+              <p className="mt-1 text-sm text-muted">
+                {d.specialization} · {d.qualifications} · {d.city}
+              </p>
+              {d.bio && <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{d.bio}</p>}
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      <form className="mt-10">
-        <button
-          formAction={logout}
-          className="rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:bg-surface"
-        >
+      <form className="mt-12">
+        <button formAction={logout} className={buttonVariants("secondary")}>
           Log out
         </button>
       </form>
